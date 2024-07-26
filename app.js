@@ -9,7 +9,7 @@ const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
     cors: {
-        origin: "http://project-3-fiv4:10000",
+        origin: "https://project-3-fiv4:10000",
         methods: ["GET", "POST"]
     }
 });
