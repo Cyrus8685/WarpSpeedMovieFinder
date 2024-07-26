@@ -12,7 +12,7 @@ loginLink.addEventListener('click', () => {
 
 /* initiates socket on client side */
 const socket = io("https://project-3-iax3.onrender.com:4000");
-
+socket.emit('connection', 'Registration Sent!');
 /* add event listeners here */
 const b = document.getElementById('regButton');
 
