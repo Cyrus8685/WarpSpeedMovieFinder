@@ -4,12 +4,12 @@ const User = require("./models/User.js")(sequelize);// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 10000;
 const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
     cors: {
-        origin: "https://project-3-fiv4.onrender.com",
+        origin: "http://project-3-fiv4:10000",
         methods: ["GET", "POST"]
     }
 });

@@ -11,7 +11,7 @@ loginLink.addEventListener('click', () => {
 });
 
 /* initiates socket on client side */
-const socket = io();
+const socket = io("http://project-3-fiv4:10000");
 
 /* add event listeners here */
 const b = document.getElementById('regButton');
