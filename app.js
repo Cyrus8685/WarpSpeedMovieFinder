@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
 
-const app = express();
+const app = express("https://project-3-iax3.onrender.com:4000");
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 app.use(express.static(path.join(__dirname, 'public')));
