@@ -2,11 +2,11 @@
   "name": "authenticationseq",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-      "build": "npm install bcryptjs",
-      "start": "node --env-file=.env app.js"
-  },
+"scripts": {
+  "start": "node --env-file=.env app.js",
+  "build": "npm install bcryptjs",
+  "heroku-postbuild": "node --env-file=.env app.js" // this will be run on Heroku
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
