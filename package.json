@@ -2,10 +2,11 @@
   "name": "authenticationseq",
   "version": "1.0.0",
   "main": "index.js",
-"scripts": {
-  "build": "npm install bcryptjs",
-  "start": "node --env-file=.env app.js"
-},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+      "start": "node src/app.js",
+  "build": "node --env-file=.env app.js"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
