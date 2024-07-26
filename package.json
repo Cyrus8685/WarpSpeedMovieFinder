@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
 "scripts": {
-  "start": "node --env-file=.env app.js",
   "build": "npm install bcryptjs",
-  "heroku-postbuild": "node --env-file=.env app.js" // this will be run on Heroku
+  "start": "node --env-file=.env app.js"
 },
   "keywords": [],
   "author": "",
