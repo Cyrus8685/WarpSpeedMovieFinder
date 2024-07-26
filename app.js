@@ -15,7 +15,7 @@ sequelize
     .sync()
     .then(() => {
         console.log("Database synced");
-        http.listen("https://project-3-iax3.onrender.com:4000", () => console.log ("Server Listening on Port 4000"));
+        http.listen(4000, () => console.log ("Server Listening on Port 4000"));
     })
     .catch(err => console.error("Error syncing database:", err));
 

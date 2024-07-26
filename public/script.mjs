@@ -11,7 +11,15 @@ loginLink.addEventListener('click', () => {
 });
 
 /* initiates socket on client side */
-const socket = io("https://project-3-iax3.onrender.com:4000");
+
+var connectionOptions = {
+
+  "force new connection": true,
+  "reconnectionAttempts": "infinity",
+  "timeout": 10000,
+  "transports": ["websocket"]
+  };
+  const socket = io("https://project-3-iax3.onrender.com:4000", connectionOptions);
 
 /* add event listeners here */
 const b = document.getElementById('regButton');
