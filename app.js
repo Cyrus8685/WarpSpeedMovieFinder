@@ -37,7 +37,8 @@ io.on('connection', socket => {
     const newData = `${data}, And Received!`;
     // io.emit triggers listeners for all connected clients
     io.emit('clientSocketName', newData);
-  });})
+  });});
+  http.listen(4000);
         console.log ('Registration Complete!');
         res.status(204);
     } catch (error) {
@@ -93,4 +94,16 @@ app.get('/userinfo', verifyToken, async (req, res) => {
         console.error('Error Fetching User Info:', error);
         res.status(500).json({ message: 'Server Error'});
     }
+});
+
+app.patch('/updateMe', verifyToken, async (req, res) => {
+
+    const { username, email } = req.body;
+    newUserData = { username, email};
+    var userId = { where : {id: req.user.userId} }; 
+    await User.update( newUserData, userId, {
+        new: true,
+        runValidators: true,
+    });
+    res.status(200).json({status: "succes", results: {newUserData}});
 });
