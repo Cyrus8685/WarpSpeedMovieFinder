@@ -31,7 +31,8 @@ socket.on('clientSocketName', data => {
     title: "Good job!",
     text: `${data}`,
     icon: "success"
-  })
+  }),
+  console.log("Success")
 });
 
 socket.on('logged off', msg => {
@@ -40,6 +41,7 @@ socket.on('logged off', msg => {
 
 console.log(msg);
 });
+console.log("Script Loaded");
 /*const baseUrl = 'http://localhost:4000'
 
 async function postUser(e) {
