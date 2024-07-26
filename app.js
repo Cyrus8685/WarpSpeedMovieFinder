@@ -25,9 +25,9 @@ app.post("/register", async function (req, res) {
         const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
-io.on('connection', socket => {
+io.on('connection', data => {
   // any code here will run upon the 'connection' event
-  console.log(`user: ${socket.id} connected`);
+  console.log(`user: ${data} connected`);
 
   /* Add your listeners here! */
   /* Add your listeners here! */
