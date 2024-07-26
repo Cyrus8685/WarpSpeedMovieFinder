@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
 
-const app = express("https://project-3-iax3.onrender.com:4000");
+const app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 app.use(express.static(path.join(__dirname, 'public')));
@@ -15,7 +15,7 @@ sequelize
     .sync()
     .then(() => {
         console.log("Database synced");
-        http.listen(4000, () => console.log ("Server Listening on Port 4000"));
+        http.listen("https://project-3-iax3.onrender.com:4000", () => console.log ("Server Listening on Port 4000"));
     })
     .catch(err => console.error("Error syncing database:", err));
 
