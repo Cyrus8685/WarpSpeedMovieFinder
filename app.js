@@ -7,7 +7,11 @@ var path = require('path');
 
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http);
+const io = require('socket.io')(http, {
+    cors: {
+      origin: "https://project-3-iax3.onrender.com"
+    }
+  });
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
