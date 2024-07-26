@@ -21,6 +21,7 @@ const exampleEvent = async function () {
   // socket.emit triggers the 'example' socket on the server side
   socket.emit('connection', 'Registration Sent!');
   socket.emit('example', 'Registration Sent!');
+  console.log("Registration Sent");
 };
 
 b.addEventListener('click', exampleEvent);
