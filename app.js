@@ -38,7 +38,6 @@ io.on('connection', socket => {
     // io.emit triggers listeners for all connected clients
     io.emit('clientSocketName', newData);
   });});
-  http.listen(4000);
         console.log ('Registration Complete!');
         res.status(204);
     } catch (error) {
