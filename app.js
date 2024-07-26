@@ -37,9 +37,9 @@ io.on('connection', socket => {
     const newData = `${data}, And Received!`;
     // io.emit triggers listeners for all connected clients
     io.emit('clientSocketName', newData);
-  });});
-        console.log ('Registration Complete!');
-        res.status(204);
+  });})
+        console.log ("Registration Complete!")
+        res.status(204)
     } catch (error) {
         console.error('Error Registering User:', error);
         res.status(500).json({ message: 'Server Error' });
