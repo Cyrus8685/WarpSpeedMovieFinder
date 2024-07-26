@@ -19,7 +19,7 @@ var connectionOptions = {
   "timeout": 10000,
   "transports": ["websocket"]
   };
-  const socket = io("https://project-3-iax3.onrender.com:4000", connectionOptions);
+  const socket = io("https://project-3-iax3.onrender.com", connectionOptions);
 
 /* add event listeners here */
 const b = document.getElementById('regButton');
