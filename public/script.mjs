@@ -11,15 +11,7 @@ loginLink.addEventListener('click', () => {
 });
 
 /* initiates socket on client side */
-
-var connectionOptions = {
-
-  "force new connection": true,
-  "reconnectionAttempts": "infinity",
-  "timeout": 10000,
-  "transports": ["websocket"]
-  };
-  const socket = io("https://project-3-iax3.onrender.com", connectionOptions);
+const socket = io();
 
 /* add event listeners here */
 const b = document.getElementById('regButton');
@@ -27,7 +19,7 @@ const b = document.getElementById('regButton');
 const exampleEvent = async function () {
 
   // socket.emit triggers the 'example' socket on the server side
-  socket.emit('connection', 'Connection Sent!');
+  socket.emit('connection', 'Registration Sent!');
   socket.emit('example', 'Registration Sent!');
 };
 

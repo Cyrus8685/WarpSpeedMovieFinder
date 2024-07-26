@@ -7,11 +7,7 @@ var path = require('path');
 
 const app = express();
 const http = require('http').Server(app);
-const io = require('socket.io')(http, {
-    cors: {
-      origin: "https://project-3-iax3.onrender.com"
-    }
-  });
+const io = require('socket.io')(http);
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,9 +25,9 @@ app.post("/register", async function (req, res) {
         const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
-io.on('connection', data => {
+io.on('connection', socket => {
   // any code here will run upon the 'connection' event
-  console.log(`user: ${data} connected`);
+  console.log(`user: ${socket.id} connected`);
 
   /* Add your listeners here! */
   /* Add your listeners here! */
@@ -41,9 +37,10 @@ io.on('connection', data => {
     const newData = `${data}, And Received!`;
     // io.emit triggers listeners for all connected clients
     io.emit('clientSocketName', newData);
-  });})
-        console.log ("Registration Complete!")
-        res.status(204)
+  });});
+  http.listen(4000);
+        console.log ('Registration Complete!');
+        res.status(204);
     } catch (error) {
         console.error('Error Registering User:', error);
         res.status(500).json({ message: 'Server Error' });
