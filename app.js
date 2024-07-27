@@ -63,7 +63,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
-        res.redirect('./Html/profile.html');
+        res.redirect('/Html/profile.html');
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ message: 'Server Error'});
