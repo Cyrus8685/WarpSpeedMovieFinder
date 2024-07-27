@@ -2,7 +2,7 @@
 
 var data = {};
                     console.log('select_link clicked');
-    $.ajax('http://localhost:4000/userinfo', {
+    $.ajax('https://project-3-fiv4.onrender.com:10000/userinfo', {
         type: 'GET',
         data: JSON.stringify(data),
         contentType: 'application/json',					
@@ -23,7 +23,7 @@ var data = {};
     data.password = `${regPassword}`;
                             e.preventDefault();
                         console.log('select_link clicked');
-        $.ajax('http://localhost:4000/updateMe', {
+        $.ajax('https://project-3-fiv4.onrender.com:10000/updateMe', {
             type: 'POST',
             data: JSON.stringify(data),
             contentType: 'application/json',					
@@ -43,7 +43,7 @@ var data = {};
         data.password = `${regPassword}`;
                                 e.preventDefault();
                             console.log('select_link clicked');
-            $.ajax('http://localhost:4000/updateMe', {
+            $.ajax('https://project-3-fiv4.onrender.com:10000/updateMe', {
                 type: 'POST',
                 data: JSON.stringify(data),
                 contentType: 'application/json',					
