@@ -110,4 +110,5 @@ app.patch('/updateMe', verifyToken, async (req, res) => {
         runValidators: true,
     });
     res.status(200).json({status: "succes", results: {newUserData}});
+    console.log("UpdateComplete");
 });
