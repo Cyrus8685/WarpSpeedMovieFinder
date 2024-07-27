@@ -19,7 +19,7 @@ sequelize
     .sync()
     .then(() => {
         console.log("Database synced");
-        http.listen(10000, () => console.log ("Server Listening on Port 4000"));
+        http.listen(process.env.PORT, () => console.log (`Server Listening on Port ${process.env.PORT}`));
     })
     .catch(err => console.error("Error syncing database:", err));
 
@@ -63,7 +63,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
-        res.redirect('/profile.html');
+        res.redirect('/Html/profile.html');
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ message: 'Server Error'});
