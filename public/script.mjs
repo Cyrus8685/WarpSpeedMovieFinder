@@ -11,7 +11,7 @@ loginLink.addEventListener('click', () => {
 });
 
 /* initiates socket on client side */
-const socket = io();
+const socket = io("https://project-3-fiv4.onrender.com");
 
 /* add event listeners here */
 const b = document.getElementById('regButton');
