@@ -31,6 +31,7 @@
                         <div class="tab-pane fade active show" id="account-general">
                             <hr class="border-light m-0">
                             <div class="card-body">
+                              <form action="/updateMe" method="POST">
                                 <div class="form-group">
                                     <label class="form-label">Username</label>
                                     <input type="text" class="form-control mb-1" name="username" id="currentUsername">
@@ -45,8 +46,10 @@
                                 </div>
                             </div>
                         </div>
+                    </form>
                         <div class="tab-pane fade" id="account-change-password">
                             <div class="card-body pb-2">
+                              <form action="/updateMe" method="POST">
                                 <div class="form-group">
                                     <label class="form-label">Current password</label>
                                     <input type="password" class="form-control" id="currentPassword">
@@ -63,6 +66,7 @@
                                     <button type="button" class="btn btn-primary" id="secondUpdate">Save changes</button>&nbsp;
                                     <button type="button" class="btn btn-default">Cancel</button>
                                 </div>
+                              </form>
                             </div>
                         </div>
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
