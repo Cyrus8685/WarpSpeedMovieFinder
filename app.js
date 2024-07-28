@@ -26,7 +26,7 @@ sequelize
     .catch(err => console.error("Error syncing database:", err));
 
 //User Registration
-app.post("/register", async function (req, res) {
+app.post("/register", data, async function (req, res) {
 
     io.on('connection', socket => {
         // any code here will run upon the 'connection' event
@@ -102,7 +102,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('/updateMe', verifyToken, async (req, res) => {
+app.patch('/updateMe', verifyToken, data, async (req, res) => {
 
     io.on('connection2', socket => {
         // any code here will run upon the 'connection' event
@@ -122,11 +122,9 @@ app.patch('/updateMe', verifyToken, async (req, res) => {
       
         // create a listener using socket.on(eventName, callback)
         console.log("UpdateComplete");
-        io.on('example2', data => {
             const newData = `${data}, And Received!`;
             // io.emit triggers listeners for all connected clients
             io.emit('clientSocketName2', newData);
-          });
     res.status(200).json({status: "succes", results: {newUserData}});
 }
 catch (error) {
