@@ -4,6 +4,7 @@ const User = require("./models/User.js")(sequelize);// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
+const cors = require('cors');
 
 const app = express();
 const http = require('http').Server(app);
@@ -14,6 +15,7 @@ const io = require('socket.io')(http, {
     }});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
+app.use(cors())
 
 sequelize
     .sync()
