@@ -61,7 +61,7 @@ console.log(msg);
 
 var data = {};
                     console.log('select_link clicked');
-    $.ajax('https://project-3-fiv4.onrender.com:10000/userinfo', {
+    $.ajax('https://project-3-fiv4.onrender.com/userinfo', {
         type: 'GET',
         data: JSON.stringify(data),
         contentType: 'application/json',					
