@@ -1,5 +1,5 @@
 /* initiates socket on client side */
-const socket = io("https://project-3-fiv4.onrender.com");
+const socket = io("https://project-3-fiv4.onrender.com/Html/profile.html");
 
 /* add event listeners here */
 const b = document.getElementById('userUpdate');
