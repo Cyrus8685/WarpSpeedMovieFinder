@@ -11,7 +11,7 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http, {
     cors: {
       origin: "https://project-3-fiv4.onrender.com",
-      methods: ["GET", "POST"]
+      methods: ["GET", "POST", "PATCH"]
     }});
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
@@ -27,25 +27,27 @@ sequelize
 
 //User Registration
 app.post("/register", async function (req, res) {
+
+    io.on('connection', socket => {
+        // any code here will run upon the 'connection' event
+        console.log(`user: ${socket.id} connected`);
+          })
+
     try {
         const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
-io.on('connection', socket => {
-  // any code here will run upon the 'connection' event
-  console.log(`user: ${socket.id} connected`);
-
   /* Add your listeners here! */
   /* Add your listeners here! */
 
   // create a listener using socket.on(eventName, callback)
-  socket.on('example', data => {
-    const newData = `${data}, And Received!`;
-    // io.emit triggers listeners for all connected clients
-    io.emit('clientSocketName', newData);
-  });});
         console.log ('Registration Complete!');
         res.status(204);
+        socket.on('example', data => {
+            const newData = `${data}, And Received!`;
+            // io.emit triggers listeners for all connected clients
+            io.emit('clientSocketName', newData);
+          });
     } catch (error) {
         console.error('Error Registering User:', error);
         res.status(500).json({ message: 'Server Error' });

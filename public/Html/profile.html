@@ -25,12 +25,12 @@
                             href="#account-change-password">Change password</a>
                     </div>
                 </div>
+            <form action="https://project-3-fiv4.onrender.com/updateMe" method="PATCH" id="userUpdate">  
                 <div class="col-md-9">
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="account-general">
                             <hr class="border-light m-0">
                             <div class="card-body">
-                                <form action="https://project-3-fiv4.onrender.com/updateMe" method="POST" id="userUpdate">
                                 <div class="form-group">
                                     <label class="form-label">Username</label>
                                     <input type="text" class="form-control mb-1" name="username" id="currentUsername">
@@ -42,12 +42,12 @@
                                 <div class="text-right mt-3">
                                     <button type="button" class="btn btn-primary" id="firstUpdate">Save changes</button>
                                 </div>
-                              </form>
                             </div>
                         </div>
+                    </form>  
+                    <form action="https://project-3-fiv4.onrender.com:10000/updateMe" method="PATCH" id="passwordUpdate">  
                         <div class="tab-pane fade" id="account-change-password">
                             <div class="card-body pb-2">
-                                <form action="https://project-3-fiv4.onrender.com:10000/updateMe" method="POST" id="passwordUpdate">
                                 <div class="form-group">
                                     <label class="form-label">Current password</label>
                                     <input type="password" class="form-control" id="currentPassword">
@@ -63,9 +63,9 @@
                                 <div class="text-right mt-3">
                                     <button type="button" class="btn btn-primary" id="secondUpdate">Save changes</button>
                                 </div>
-                              </form>
                             </div>
                         </div>
+                    </form>
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script rel="stylesheet" src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

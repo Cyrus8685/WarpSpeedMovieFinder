@@ -66,9 +66,9 @@ var data = {};
         data: JSON.stringify(data),
         contentType: 'application/json',					
         success: function () {
-            data.username = document.getElementById('currentUsername').innerHTML
-            data.email = document.getElementById('currentEmail').innerHTML
-            data.password = document.getElementById('currentPassword').innerHTML
-        }
+            data.username = document.getElementById('currentUsername').innerHTML,
+            data.email = document.getElementById('currentEmail').innerHTML,
+            console.log("User Info Obtained")
+        },
 
     })
