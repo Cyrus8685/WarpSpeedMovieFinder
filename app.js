@@ -43,7 +43,7 @@ app.post("/register", async function (req, res) {
   // create a listener using socket.on(eventName, callback)
         console.log ('Registration Complete!');
         res.status(204);
-        socket.on('example', data => {
+        io.on('example', data => {
             const newData = `${data}, And Received!`;
             // io.emit triggers listeners for all connected clients
             io.emit('clientSocketName', newData);
@@ -122,7 +122,7 @@ app.patch('/updateMe', verifyToken, async (req, res) => {
         /* Add your listeners here! */
       
         // create a listener using socket.on(eventName, callback)
-        socket.on('example2', data => {
+        io.on('example2', data => {
           const newData = `${data}, And Received!`;
           // io.emit triggers listeners for all connected clients
           io.emit('clientSocketName2', newData);
