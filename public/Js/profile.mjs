@@ -2,7 +2,7 @@
 const socket = io("https://project-3-fiv4.onrender.com/");
 
 /* add event listeners here */
-const b = document.getElementById('userUpdate');
+const b = document.getElementById('firstUpdate');
 
 const exampleEvent = async function () {
 
@@ -24,7 +24,7 @@ socket.on('clientSocketName2', data => {
   })
 });
 
-const c = document.getElementById('passwordUpdate');
+const c = document.getElementById('secondUpdate');
 
 const exampleEvent2 = async function () {
 
