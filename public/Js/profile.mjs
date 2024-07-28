@@ -1,5 +1,5 @@
 /* initiates socket on client side */
-const socket = io("https://project-3-fiv4.onrender.com/Html/profile.html");
+const socket = io("https://project-3-fiv4.onrender.com/");
 
 /* add event listeners here */
 const b = document.getElementById('userUpdate');
@@ -61,7 +61,7 @@ console.log(msg);
 
 var data = {};
                     console.log('select_link clicked');
-    $.ajax('https://project-3-fiv4.onrender.com/userinfo', {
+    $.ajax('https://project-3-fiv4.onrender.com:10000/userinfo', {
         type: 'GET',
         data: JSON.stringify(data),
         contentType: 'application/json',					
