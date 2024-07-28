@@ -42,12 +42,12 @@ app.post("/register", async function (req, res) {
 
   // create a listener using socket.on(eventName, callback)
         console.log ('Registration Complete!');
-        res.status(204);
         io.on('example', data => {
             const newData = `${data}, And Received!`;
             // io.emit triggers listeners for all connected clients
             io.emit('clientSocketName', newData);
           });
+        res.status(204);
     } catch (error) {
         console.error('Error Registering User:', error);
         res.status(500).json({ message: 'Server Error' });
@@ -105,6 +105,10 @@ app.get('/userinfo', verifyToken, async (req, res) => {
 });
 
 app.patch('/updateMe', verifyToken, async (req, res) => {
+
+    io.on('connection2', socket => {
+        // any code here will run upon the 'connection' event
+        console.log(`user: ${socket.id} connected`);})
     
     try {
     const { username, email } = req.body;
@@ -114,21 +118,18 @@ app.patch('/updateMe', verifyToken, async (req, res) => {
         new: true,
         runValidators: true,
     });
-    io.on('connection2', socket => {
-        // any code here will run upon the 'connection' event
-        console.log(`user: ${socket.id} connected`);
       
         /* Add your listeners here! */
         /* Add your listeners here! */
       
         // create a listener using socket.on(eventName, callback)
+        console.log("UpdateComplete");
         io.on('example2', data => {
-          const newData = `${data}, And Received!`;
-          // io.emit triggers listeners for all connected clients
-          io.emit('clientSocketName2', newData);
-        });})
+            const newData = `${data}, And Received!`;
+            // io.emit triggers listeners for all connected clients
+            io.emit('clientSocketName2', newData);
+          });
     res.status(200).json({status: "succes", results: {newUserData}});
-    console.log("UpdateComplete");
 }
 catch (error) {
     console.error('Error Registering User:', error);
