@@ -42,11 +42,9 @@ app.post("/register", async function (req, res) {
 
   // create a listener using socket.on(eventName, callback)
         console.log ('Registration Complete!');
-        io.on('example', data => {
             const newData = `${data}, And Received!`;
             // io.emit triggers listeners for all connected clients
             io.emit('clientSocketName', newData);
-          });
         res.status(204);
     } catch (error) {
         console.error('Error Registering User:', error);

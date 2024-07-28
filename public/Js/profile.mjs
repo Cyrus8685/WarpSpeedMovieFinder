@@ -58,7 +58,7 @@ console.log(msg);
 
 
 
-
+$( document ).ready(function () {
 var data = {};
                     console.log('select_link clicked');
     $.ajax('https://project-3-fiv4.onrender.com:10000/userinfo', {
@@ -71,4 +71,4 @@ var data = {};
             console.log("User Info Obtained")
         },
 
-    })
+    })});
