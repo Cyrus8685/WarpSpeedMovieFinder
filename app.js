@@ -16,6 +16,9 @@ const io = require('socket.io')(http, {
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/profile.html")
+  })
 
 sequelize
     .sync()
