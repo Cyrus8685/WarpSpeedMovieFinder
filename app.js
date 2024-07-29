@@ -94,18 +94,18 @@ function verifyToken(req, res, next) {
 // Protected route to get user info
 app.get('/userinfo', verifyToken, async (req, res) => {
     try {
-        const user = await User.findByPk(req.user.userId);
-        if (!user) {
+        const data = await User.findOne(req.user.userId);
+        if (!data) {
             return res.status(404).json({ message: 'User Not Found'});
         }
-        res.json({ user });
+        return res.status({data});
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
         res.status(500).json({ message: 'Server Error'});
     }
 });
 
-app.patch('/updateUserinfo', verifyToken, async (req, res) => {
+app.patch('/Update', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
@@ -132,7 +132,7 @@ catch (error) {
 }
 });
 
-app.patch('/updatePassword', verifyToken, async (req, res) => {
+app.patch('/Password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
