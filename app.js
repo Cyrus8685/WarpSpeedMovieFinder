@@ -13,7 +13,7 @@ const io = require('socket.io')(http, {
       origin: "https://project-3-fiv4.onrender.com",
       methods: ["GET", "POST", "PATCH"]
     }});
-app.use(express.static(path.join(__dirname, '/public/')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
@@ -109,7 +109,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('https://project-3-fiv4.onrender.com/update', verifyToken, async (req, res) => {
+app.patch('/update', async (req, res) => {
     
     try {
     const { username, email } = req.body;
@@ -131,7 +131,7 @@ catch (error) {
 }
 });
 
-app.patch('/password', verifyToken, async (req, res) => {
+app.patch('/password', async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
