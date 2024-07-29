@@ -72,7 +72,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
-        res.header("Authorization", `Bearer ${token}`);
+        res.cookie('token', token, { httpOnly: true });
         res.redirect('/Html/profile.html');
     } catch (error) {
         console.error('Error logging in:', error);
@@ -143,7 +143,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
 
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
-    const token = req.header('Authorization');
+    const token = req.cookie('token');
     if (!token) {
         return res.status(401).json({ message: 'Access Denied'});
     } try {
