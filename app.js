@@ -75,7 +75,7 @@ app.post('/login', async (req, res) => {
         console.log(token);
         process.env.User_PW = password;
         console.log(process.env.User_PW);
-        inRes.set('Authorization', `Bearer ${token}`);
+        res.set('Authorization', `Bearer ${token}`);
         res.redirect('/Html/profile.html');
     } catch (error) {
         console.error('Error logging in:', error);
