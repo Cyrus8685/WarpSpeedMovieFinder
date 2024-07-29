@@ -75,6 +75,7 @@ app.post('/login', async (req, res) => {
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
         res.cookie('token', `Bearer ${token}`, { httpOnly: true });
+        res.cookie('userid', `${user.id}`, { httpOnly: true });
         res.redirect('/Html/profile.html');
     } catch (error) {
         console.error('Error logging in:', error);
@@ -84,17 +85,22 @@ app.post('/login', async (req, res) => {
 
 app.post('/update', verifyToken, async (req, res) => {
     
-    try {
-    const { username, email } = req.body;
+        try {
+            const { username, email } = req.body;
+            var userId = req.cookies.id
+            const user = await User.findOne({ where: { userId } });
+            if (!user) {
+                return res.status(400).json({ message: 'Invalid Credentials' });
+            }
+        
     newUserData = { username, email};
-    var userId = { where : {id: req.user.userId} }; 
-    await User.update( newUserData, userId, {
+    await User.update( userId, newUserData, {
         new: true,
         runValidators: true,
     });
           const newData = "User Information Updated";
           // io.emit triggers listeners for all connected clients
-    res.status(200).json({status: "succes", results: {newUserData}});
+    res.status(204).json({status: "succes", results: {newUserData}});
     io.emit('clientSocketName2', newData);
     console.log("User Information Updated");
 }
@@ -108,13 +114,14 @@ app.post('/password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
+    const user = await User.findOne({ where: { CurrentPassword } });
     const isPasswordMatch = await bcrypt.compare(CurrentPassword, user.password);
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
     }
     newUserData = { NewPassword };
-    var userId = { where : {id: req.user.userId} }; 
-    await User.update( newUserData, userId, {
+    var userId = req.cookies.id
+    await User.update( userId, newUserData, {
         new: true,
         runValidators: true,
     });
@@ -132,16 +139,14 @@ catch (error) {
 
 app.get('/userinfo', verifyToken, async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ where: { email } });
+        const { id } = req.cookies.id
+        const user = await User.findOne({ where: { id } });
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
-        const isPasswordMatch = await bcrypt.compare(password, user.password);
-        if (!isPasswordMatch) {
-            return res.status(400).json({ message: 'Invalid Credentials '});
-        }
+        data = { user };
         return res.status({data});
+    
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
         res.status(500).json({ message: 'Server Error'});
