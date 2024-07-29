@@ -119,11 +119,6 @@ app.patch('/Update', verifyToken, async (req, res) => {
         new: true,
         runValidators: true,
     });
-      
-        /* Add your listeners here! */
-        /* Add your listeners here! */
-      
-        // create a listener using socket.on(eventName, callback)
           const newData = "User Information Updated";
           // io.emit triggers listeners for all connected clients
     res.status(200).json({status: "succes", results: {newUserData}});
