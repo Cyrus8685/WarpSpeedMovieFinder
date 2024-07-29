@@ -7,6 +7,7 @@ var path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 var helmet = require('helmet');
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const http = require('http').createServer(app);
@@ -21,6 +22,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json()); 
 app.use(cors());
 app.use(helmet());
+app.use(cookieParser());
 
 sequelize
     .sync()
@@ -143,7 +145,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
 
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
-    const token = req.header('token');
+    const token = req.cookies.token
     if (!token) {
         return res.status(401).json({ message: 'Access Denied'});
     } try {
