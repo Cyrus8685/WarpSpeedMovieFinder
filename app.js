@@ -109,7 +109,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('/Update', verifyToken, async (req, res) => {
+app.patch('/update', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
@@ -131,7 +131,7 @@ catch (error) {
 }
 });
 
-app.patch('*/Password', verifyToken, async (req, res) => {
+app.patch('/password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
