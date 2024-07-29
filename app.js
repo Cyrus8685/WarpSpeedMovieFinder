@@ -17,7 +17,8 @@ const io = require('socket.io')(http, {
     }});
 app.use(express.static(path.join(__dirname, './public')));
 app.use(express.urlencoded({ extended: true }));
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json()); 
 app.use(cors());
 app.use(helmet());
 
@@ -29,9 +30,6 @@ sequelize
     })
     .catch(err => console.error("Error syncing database:", err));
 
-    app.get("/:universalURL", async function (req, res) {
-        res.status("404 URL NOT FOUND");
-    });
 
 //User Registration
 app.post("/register", async function (req, res) {
@@ -84,35 +82,6 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Middleware to verify JWT token
-function verifyToken(req, res, next) {
-    const token = req.header('Authorization');
-    if (!token) {
-        return res.status(401).json({ message: 'Access Denied'});
-    } try {
-        const decoded = jwt.verify(token.split(' ')[1], process.env.DB_SECRET);
-        req.user = decoded;
-        next();
-    }   catch (error) {
-        console.error('Error verifying token:', error);
-        res.status(401).json({ message: 'Invalid Token' });
-    }
-}
-
-// Protected route to get user info
-app.get('/userinfo', verifyToken, async (req, res) => {
-    try {
-        const data = await User.findOne(req.user.userId);
-        if (!data) {
-            return res.status(404).json({ message: 'User Not Found'});
-        }
-        return res.status({data});
-    }   catch (error) {
-        console.error('Error Fetching User Info:', error);
-        res.status(500).json({ message: 'Server Error'});
-    }
-});
-
 app.post('/update', verifyToken, async (req, res) => {
     
     try {
@@ -160,3 +129,33 @@ catch (error) {
     res.status(500).json({ message: 'Server Error' });
 }
 });
+
+app.get('/userinfo', verifyToken, async (req, res) => {
+    try {
+        const data = await User.findOne(req.user.userId);
+        if (!data) {
+            return res.status(404).json({ message: 'User Not Found'});
+        }
+        return res.status({data});
+    }   catch (error) {
+        console.error('Error Fetching User Info:', error);
+        res.status(500).json({ message: 'Server Error'});
+    }
+});
+
+// Middleware to verify JWT token
+function verifyToken(req, res, next) {
+    const token = req.header('Authorization');
+    if (!token) {
+        return res.status(401).json({ message: 'Access Denied'});
+    } try {
+        const decoded = jwt.verify(token.split(' ')[1], process.env.DB_SECRET);
+        req.user = decoded;
+        next();
+    }   catch (error) {
+        console.error('Error verifying token:', error);
+        res.status(401).json({ message: 'Invalid Token' });
+    }
+}
+
+// Protected route to get user info
