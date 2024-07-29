@@ -104,7 +104,7 @@ catch (error) {
 }
 });
 
-app.patch('/password', verifyToken, async (req, res) => {
+app.post('/password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
@@ -132,9 +132,14 @@ catch (error) {
 
 app.get('/userinfo', verifyToken, async (req, res) => {
     try {
-        const data = await User.findOne(req.user.userId);
-        if (!data) {
-            return res.status(404).json({ message: 'User Not Found'});
+        const { email, password } = req.body;
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid Credentials' });
+        }
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+        if (!isPasswordMatch) {
+            return res.status(400).json({ message: 'Invalid Credentials '});
         }
         return res.status({data});
     }   catch (error) {
