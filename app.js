@@ -146,6 +146,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
     const token = req.cookies.token
+    console.log(token);
     if (!token) {
         return res.status(401).json({ message: 'Access Denied'});
     } try {
