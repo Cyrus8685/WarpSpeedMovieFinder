@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 var path = require('path');
 const cors = require('cors');
 
-const app = express();
+const app = express("https://project-3-fiv4.onrender.com");
 const http = require('http').Server(app);
 const io = require('socket.io')(http, {
     cors: {
