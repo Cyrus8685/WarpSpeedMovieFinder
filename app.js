@@ -69,8 +69,8 @@ app.post('/login', async (req, res) => {
         if (!isPasswordMatch) {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
-        const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
-        console.log(token);
+        process.env.DB_SECRET = jwt.sign({ userId: user.id },{ expiresIn: '1h' });
+        console.log(process.env.DB_SECRET);
         process.env.User_PW = password;
         console.log(process.env.User_PW);
         res.redirect('/Html/profile.html');
@@ -109,7 +109,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('/update', async (req, res) => {
+app.patch('/update', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
@@ -131,7 +131,7 @@ catch (error) {
 }
 });
 
-app.patch('/password', async (req, res) => {
+app.patch('/password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
