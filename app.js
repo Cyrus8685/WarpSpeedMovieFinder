@@ -70,7 +70,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
-        console.log(process.env.DB_SECRET);
+        console.log(token);
         process.env.User_PW = password;
         console.log(process.env.User_PW);
         res.redirect('/Html/profile.html');
