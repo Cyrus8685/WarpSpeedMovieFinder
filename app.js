@@ -109,7 +109,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('/update', verifyToken, async (req, res) => {
+app.patch('https://project-3-fiv4.onrender.com/update', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
