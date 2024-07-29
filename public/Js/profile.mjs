@@ -27,7 +27,7 @@ socket.on('clientSocketName3', data => {
 $( document ).ready(function () {
 var data = {};
                     console.log('select_link clicked');
-    fetch('https://project-3-fiv4.onrender.com/userinfo', {
+    fetch('/userinfo', {
         type: 'GET',
         data: JSON.stringify(data),
         contentType: 'application/json',					

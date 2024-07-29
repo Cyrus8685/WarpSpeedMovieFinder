@@ -113,7 +113,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('/update', verifyToken, async (req, res) => {
+app.post('/update', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
