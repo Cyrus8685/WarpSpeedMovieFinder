@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "node --env-file=.env app.js",
-  "build": "npm install bcryptjs"
+    "start": "node --env-file=.env app.js",
+    "build": "npm install bcryptjs"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,8 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "flash": "^1.1.0",
+    "helm": "^0.2.1",
+    "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "node-notifier": "^10.0.1",
     "node-pushnotifications": "^3.0.0",

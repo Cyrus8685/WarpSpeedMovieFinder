@@ -6,18 +6,21 @@ var jwt = require('jsonwebtoken');
 var path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+var helmet = require('helmet');
 
-const app = express("https://project-3-fiv4.onrender.com");
-const http = require('http').Server(app);
+const app = express();
+const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
     cors: {
       origin: "https://project-3-fiv4.onrender.com",
       methods: ["GET", "POST", "PATCH"]
     }});
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, './public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(cors())
+app.use(cors());
+app.use(helmet());
+
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/profile.html")
   })
