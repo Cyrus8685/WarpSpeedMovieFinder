@@ -131,7 +131,7 @@ catch (error) {
 }
 });
 
-app.patch('/Password', verifyToken, async (req, res) => {
+app.patch('*/Password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
