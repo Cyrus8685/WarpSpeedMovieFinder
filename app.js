@@ -69,7 +69,7 @@ app.post('/login', async (req, res) => {
         if (!isPasswordMatch) {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
-        process.env.DB_SECRET = jwt.sign({ userId: user.id },{ expiresIn: '1h' });
+        const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
         console.log(process.env.DB_SECRET);
         process.env.User_PW = password;
         console.log(process.env.User_PW);
