@@ -19,7 +19,12 @@ app.use(express.static(path.join(__dirname, './public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cors());
-app.use(helmet());
+app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      xDownloadOptions: false,
+    })
+  );
 
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "/profile.html")
