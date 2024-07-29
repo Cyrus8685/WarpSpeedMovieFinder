@@ -73,7 +73,7 @@ app.post('/login', async (req, res) => {
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
         console.log(token);
-        res.header('Authorization', `Bearer ${token}`);
+        res.DefaultRequestHeaders.add('Authorization', `Bearer ${token}`);
         res.set('Access-Control-Expose-Headers', 'Authorization');
         res.redirect('/Html/profile.html');
     } catch (error) {
