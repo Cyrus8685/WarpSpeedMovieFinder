@@ -23,14 +23,6 @@ socket.on('clientSocketName', data => {
   }),
   console.log("Success")
 });
-
-socket.on('logged off', msg => {
-  // any code here will execute when this socket is triggered
-  // example, I could create a <p> tag with innerText containing the msg and append it to my <div id='app'>
-
-console.log(msg);
-});
-console.log("Script Loaded");
 /*const baseUrl = 'http://localhost:4000'
 
 async function postUser(e) {

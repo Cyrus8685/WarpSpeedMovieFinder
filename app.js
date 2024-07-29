@@ -92,7 +92,7 @@ function verifyToken(req, res, next) {
 }
 
 // Protected route to get user info
-app.get('/userinfo', verifyToken, async (req, res) => {
+app.get('/userinfo/', verifyToken, async (req, res) => {
     try {
         const data = await User.findOne(req.user.userId);
         if (!data) {
@@ -105,7 +105,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('/Update', verifyToken, async (req, res) => {
+app.patch('/Update/', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
@@ -132,7 +132,7 @@ catch (error) {
 }
 });
 
-app.patch('/Password', verifyToken, async (req, res) => {
+app.patch('/Password/', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
