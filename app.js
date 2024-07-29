@@ -13,7 +13,7 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
     cors: {
       origin: "https://project-3-fiv4.onrender.com",
-      methods: ["GET", "POST", "PATCH"],
+      methods: ["GET", "POST", "PATCH"]
     }});
 app.use(express.static(path.join(__dirname, './public')));
 app.use(express.urlencoded({ extended: true }));
@@ -72,9 +72,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
-        console.log(token);
-        res.DefaultRequestHeaders.add('Authorization', `Bearer ${token}`);
-        res.set('Access-Control-Expose-Headers', 'Authorization');
+        res.header("Authorization", `Bearer ${token}`);
         res.redirect('/Html/profile.html');
     } catch (error) {
         console.error('Error logging in:', error);
