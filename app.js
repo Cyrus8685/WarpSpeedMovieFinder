@@ -25,6 +25,10 @@ sequelize
     })
     .catch(err => console.error("Error syncing database:", err));
 
+    app.get("/:universalURL", async function (req, res) {
+        res.status("404 URL NOT FOUND");
+    });
+
 //User Registration
 app.post("/register", async function (req, res) {
 
@@ -92,7 +96,7 @@ function verifyToken(req, res, next) {
 }
 
 // Protected route to get user info
-app.get('https://project-3-fiv4.onrender.com/userinfo/', verifyToken, async (req, res) => {
+app.get('/userinfo', verifyToken, async (req, res) => {
     try {
         const data = await User.findOne(req.user.userId);
         if (!data) {
@@ -105,7 +109,7 @@ app.get('https://project-3-fiv4.onrender.com/userinfo/', verifyToken, async (req
     }
 });
 
-app.patch('https://project-3-fiv4.onrender.com/Update/', verifyToken, async (req, res) => {
+app.patch('/Update', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
@@ -132,7 +136,7 @@ catch (error) {
 }
 });
 
-app.patch('https://project-3-fiv4.onrender.com/Password/', verifyToken, async (req, res) => {
+app.patch('/Password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
