@@ -13,7 +13,7 @@ const io = require('socket.io')(http, {
       origin: "https://project-3-fiv4.onrender.com",
       methods: ["GET", "POST", "PATCH"]
     }});
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '/public/')));
 app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
@@ -26,7 +26,7 @@ sequelize
     .catch(err => console.error("Error syncing database:", err));
 
 //User Registration
-app.post("/register", data, async function (req, res) {
+app.post("/register", async function (req, res) {
 
     io.on('connection', socket => {
         // any code here will run upon the 'connection' event
@@ -42,10 +42,11 @@ app.post("/register", data, async function (req, res) {
 
   // create a listener using socket.on(eventName, callback)
         console.log ('Registration Complete!');
-            const newData = `${data}, And Received!`;
+            const newData = "Registration Complete";
+    
             // io.emit triggers listeners for all connected clients
-            io.emit('clientSocketName', newData);
         res.status(204);
+        io.emit('clientSocketName', newData);
     } catch (error) {
         console.error('Error Registering User:', error);
         res.status(500).json({ message: 'Server Error' });
@@ -66,6 +67,8 @@ app.post('/login', async (req, res) => {
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
         console.log(token);
+        process.env.User_PW = password;
+        console.log(process.env.User_PW);
         res.redirect('/Html/profile.html');
     } catch (error) {
         console.error('Error logging in:', error);
@@ -102,11 +105,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     }
 });
 
-app.patch('/updateMe', verifyToken, data, async (req, res) => {
-
-    io.on('connection2', socket => {
-        // any code here will run upon the 'connection' event
-        console.log(`user: ${socket.id} connected`);})
+app.patch('/updateUserinfo', verifyToken, async (req, res) => {
     
     try {
     const { username, email } = req.body;
@@ -121,11 +120,37 @@ app.patch('/updateMe', verifyToken, data, async (req, res) => {
         /* Add your listeners here! */
       
         // create a listener using socket.on(eventName, callback)
-        console.log("UpdateComplete");
-            const newData = `${data}, And Received!`;
-            // io.emit triggers listeners for all connected clients
-            io.emit('clientSocketName2', newData);
+          const newData = "User Information Updated";
+          // io.emit triggers listeners for all connected clients
     res.status(200).json({status: "succes", results: {newUserData}});
+    io.emit('clientSocketName2', newData);
+    console.log("User Information Updated");
+}
+catch (error) {
+    console.error('Error Registering User:', error);
+    res.status(500).json({ message: 'Server Error' });
+}
+});
+
+app.patch('/updatePassword', verifyToken, async (req, res) => {
+    
+    try {
+    const { CurrentPassword, NewPassword } = req.body;
+    const isPasswordMatch = await bcrypt.compare(CurrentPassword, user.password);
+    if (!isPasswordMatch) {
+        return res.status(400).json({ message: 'Invalid Password'});
+    }
+    newUserData = { NewPassword };
+    var userId = { where : {id: req.user.userId} }; 
+    await User.update( newUserData, userId, {
+        new: true,
+        runValidators: true,
+    });
+      const newData = "User Password Updated";
+          // io.emit triggers listeners for all connected clients
+    res.status(200).json({status: "succes", results: {newUserData}});
+    io.emit('clientSocketName3', newData);
+    console.log("User Information Updated");
 }
 catch (error) {
     console.error('Error Registering User:', error);

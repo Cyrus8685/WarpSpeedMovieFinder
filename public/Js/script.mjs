@@ -13,18 +13,6 @@ loginLink.addEventListener('click', () => {
 /* initiates socket on client side */
 const socket = io("https://project-3-fiv4.onrender.com");
 
-/* add event listeners here */
-const b = document.getElementById('regButton');
-
-const exampleEvent = async function () {
-
-  // socket.emit triggers the 'example' socket on the server side
-  socket.emit('connection', 'Registration Sent!');
-  console.log("Registration Sent");
-};
-
-b.addEventListener('click', exampleEvent);
-
 /* Add your socket listeners here! */
 socket.on('clientSocketName', data => {
   // any code here will execute when this socket is triggered
