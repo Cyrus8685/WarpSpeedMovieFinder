@@ -100,10 +100,13 @@ app.post('/update', verifyToken, async (req, res) => {
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials' });
             }
-     var { username, email } = req.body;
-     UserInfo = { username : username,
-                          email : email}
-    await User.update(UserInfo, id);
+            const { username, email } = req.body;
+            newUserData = { username, email};
+            var userId = { where : {id: req.user.userId} }; 
+            await User.update( newUserData, userId, {
+                new: true,
+                runValidators: true,
+            });
           const newData = "User Information Updated";
           // io.emit triggers listeners for all connected clients
     res.status(204).json({status: "succes", results: {newUserData}});
@@ -118,18 +121,22 @@ catch (error) {
 
 app.post('/password', verifyToken, async (req, res) => {
 
+   const { password, NewPassword } = req.body;
    const id = req.cookies.userid
     console.log(id);
     try {
-    var { password, NewPassword } = req.body;
     const user = await User.findOne({ where: { id } });
     console.log(user);
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
     }
-    password = {password: NewPassword};
-    await User.update(password, id);
+    newUserData = {NewPassword};
+    var userId = { where : {id: id} }; 
+    await User.update( newUserData, userId, {
+        new: true,
+        runValidators: true,
+    });
       const newData = "User Password Updated";
           // io.emit triggers listeners for all connected clients
     res.status(200).json({status: "succes", results: {newUserData}});
