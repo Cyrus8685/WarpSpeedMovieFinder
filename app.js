@@ -43,8 +43,7 @@ app.post("/register", async function (req, res) {
           const { username, email, password } = req.body;
           const user = await User.findOne({ where: { email } });
           const isEmailMatch = await compare(email, user.email);
-          if (!isEmailMatch) 
-            try {
+         try {  if (!isEmailMatch) {
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
   /* Add your listeners here! */
@@ -57,7 +56,7 @@ app.post("/register", async function (req, res) {
             // io.emit triggers listeners for all connected clients
         res.status(204);
         io.emit('clientSocketName', newData);
-    } catch (error) {
+    }} catch (error) {
         console.error('Error Registering User:', error);
         res.status(500).json({ message: 'Server Error' });
     }
