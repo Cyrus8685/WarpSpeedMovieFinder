@@ -74,6 +74,8 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
+        console.log(token);
+        console.log(user.id);
         res.cookie('token', `Bearer ${token}`, { httpOnly: true });
         res.cookie('userid', `${user.id}`, { httpOnly: true });
         setTimeout(() => {
