@@ -76,7 +76,9 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
         res.cookie('token', `Bearer ${token}`, { httpOnly: true });
         res.cookie('userid', `${user.id}`, { httpOnly: true });
+        setTimeout(() => {
         res.redirect('/Html/profile.html');
+    }, "3000");
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ message: 'Server Error'});
