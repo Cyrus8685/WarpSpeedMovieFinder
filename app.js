@@ -124,27 +124,27 @@ catch (error) {
 
 app.post('/password', verifyToken, async (req, res) => {
 
-   const { password, NewPassword } = req.body;
-   const id = req.cookies.userid
+    const id = req.cookies.userid
     console.log(id);
-    try {
-    const user = await User.findOne({ where: { id } });
-    console.log(user);
-    const isPasswordMatch = await bcrypt.compare(password, NewPassword);
-    if (isPasswordMatch) {
-        return res.status(400).json({ message: 'Cannot Use Same Password'});
-    }
-    newUserData = { NewPassword };
-    var userId = { where : {id: id} }; 
-    await User.update( newUserData, userId, {
-        new: true,
-        runValidators: true,
-    });
+    
+        try {
+            const user = await User.findOne({ where: { id: id } });
+            console.log(user);
+            if (!user) {
+                return res.status(400).json({ message: 'Invalid Credentials' });
+            }
+            const { password, NewPassword } = req.body;
+            newUserData = { NewPassword };
+            var userId = { where : {id: req.user.userId} }; 
+            await User.update( newUserData, userId, {
+                new: true,
+                runValidators: true,
+            });
       const newData = "User Password Updated";
           // io.emit triggers listeners for all connected clients
-    res.status(200).json({status: "succes", results: {newUserData}});
+    res.status(204).json({status: "succes", results: {newUserData}});
     io.emit('clientSocketName3', newData);
-    console.log("User Information Updated");
+    console.log("User Password Updated");
 }
 catch (error) {
     console.error('Error Registering User:', error);
