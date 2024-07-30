@@ -42,8 +42,11 @@ app.post("/register", async function (req, res) {
           })
           const { username, email, password } = req.body;
           const user = await User.findOne({ where: { email } });
-          const isEmailMatch = await compare(email, user.email);
-         try {  if (!isEmailMatch) {
+         try {
+            const isEmailMatch = await compare(email, user.email);
+            if (isEmailMatch) {
+                return res.status(400).json({ message: 'Email is Already Registered '});
+            }
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
   /* Add your listeners here! */
@@ -56,7 +59,7 @@ app.post("/register", async function (req, res) {
             // io.emit triggers listeners for all connected clients
         res.status(204);
         io.emit('clientSocketName', newData);
-    }} catch (error) {
+    } catch (error) {
         console.error('Error Registering User:', error);
         res.status(500).json({ message: 'Server Error' });
     }
@@ -71,7 +74,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
-        if (!isPasswordMatch) {
+        if (isPasswordMatch) {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
@@ -127,8 +130,8 @@ app.post('/password', verifyToken, async (req, res) => {
     const user = await User.findOne({ where: { id } });
     console.log(user);
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch) {
-        return res.status(400).json({ message: 'Invalid Password'});
+    if (isPasswordMatch) {
+        return res.status(400).json({ message: 'Cannot Use Same Password'});
     }
     newUserData = { NewPassword };
     var userId = { where : {id: id} }; 
