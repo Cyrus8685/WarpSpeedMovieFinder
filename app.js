@@ -36,19 +36,19 @@ sequelize
 //User Registration
 app.post("/register", async function (req, res) {
 
+    const { username, email, password } = req.body;
+
     io.on('connection', socket => {
         // any code here will run upon the 'connection' event
         console.log(`user: ${socket.id} connected`);
-          })
+          });
 
          try {
-            const { username, email, password } = req.body;
             const user = await User.findOne({ where: { email } });
-        if (email === user.email) {
+        if (user) {
             return res.status(400).json({ message: 'User Already Exists' });
-        }
+        };
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
-        console.log({ username, email, password: hashedPassword });
         await User.create({ username, email, password: hashedPassword });
   /* Add your listeners here! */
   /* Add your listeners here! */
