@@ -100,12 +100,8 @@ app.post('/update', verifyToken, async (req, res) => {
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials' });
             }
-     const { username, email } = req.body;    
-    newUserData = { username, email};
-    await User.update( user.id, newUserData, {
-        new: true,
-        runValidators: true,
-    });
+     const { username, email } = req.body;   
+    await User.update( username, email);
           const newData = "User Information Updated";
           // io.emit triggers listeners for all connected clients
     res.status(204).json({status: "succes", results: {newUserData}});
@@ -130,10 +126,8 @@ app.post('/password', verifyToken, async (req, res) => {
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
     }
-    await User.update( user.Id, NewPassword, {
-        new: true,
-        runValidators: true,
-    });
+    password = NewPassword
+    await User.update(password);
       const newData = "User Password Updated";
           // io.emit triggers listeners for all connected clients
     res.status(200).json({status: "succes", results: {newUserData}});
