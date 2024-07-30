@@ -130,7 +130,7 @@ app.post('/password', verifyToken, async (req, res) => {
     try {
     const user = await User.findOne({ where: { id } });
     console.log(user);
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
+    const isPasswordMatch = await bcrypt.compare(password, NewPassword);
     if (isPasswordMatch) {
         return res.status(400).json({ message: 'Cannot Use Same Password'});
     }
