@@ -44,12 +44,12 @@ app.post("/register", async function (req, res) {
          try {
             const { username, email, password } = req.body;
             const user = await User.findOne({ where: { email } });
-        if (user) {
+        if (email === user.email) {
             return res.status(400).json({ message: 'User Already Exists' });
         }
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
+        console.log({ username, email, password: hashedPassword });
         await User.create({ username, email, password: hashedPassword });
-        console.log(User);
   /* Add your listeners here! */
   /* Add your listeners here! */
 
