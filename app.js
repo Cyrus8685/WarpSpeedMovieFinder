@@ -40,11 +40,11 @@ app.post("/register", async function (req, res) {
         // any code here will run upon the 'connection' event
         console.log(`user: ${socket.id} connected`);
           })
+          const { username, email, password } = req.body;
           const user = await User.findOne({ where: { email } });
           const isEmailMatch = await compare(email, user.email);
           if (!isEmailMatch) 
             try {
-        const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
   /* Add your listeners here! */
