@@ -91,11 +91,12 @@ app.post('/login', async (req, res) => {
 
 app.post('/update', verifyToken, async (req, res) => {
 
-    const  { id } = req.cookies.userid
+    const id = req.cookies.userid
     console.log(id);
     
         try {
             const user = await User.findOne({ where: { id } });
+            console.log(user);
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials' });
             }
@@ -118,11 +119,13 @@ catch (error) {
 });
 
 app.post('/password', verifyToken, async (req, res) => {
-    const id = req.cookies.userid;
+
+   const id = req.cookies.userid
     console.log(id);
     try {
     const { password, NewPassword } = req.body;
     const user = await User.findOne({ where: { id } });
+    console.log(user);
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
@@ -150,6 +153,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     
     try {
         const user = await User.findOne({ where: { id } });
+        console.log(user);
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
