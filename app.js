@@ -44,10 +44,17 @@ app.post("/register", async function (req, res) {
           });
 
          try {
-            const user = await User.findOne({ where: { email } });
-        if (user) {
-            return res.status(400).json({ message: 'User Already Exists' });
-        };
+            const currentEmail= await User.findOne({ where: { email } });
+            console.log(currentEmail)
+            if (currentEmail) {
+                return res.status(304),
+                io.emit('Email Already Exists', "Email Already Exists")
+            }
+        const currentUsername = await User.findOne({ where: { username } });
+        if (currentUsername) {
+            return res.status(304),
+            io.emit('Username Already Exists', "Username Already Exists")
+        }
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
   /* Add your listeners here! */
@@ -62,7 +69,8 @@ app.post("/register", async function (req, res) {
         io.emit('clientSocketName', newData);
     } catch (error) {
         console.error('Error Registering User:', error);
-        res.status(500).json({ message: 'Server Error' });
+        return res.status(500),
+        io.emit('Server Error', "Server Error")
     }
 });
 
@@ -72,11 +80,13 @@ app.post('/login', async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid Credentials' });
+            return res.status(400),
+            io.emit('Email Address Not Found', "Email Address Not Found")
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            return res.status(400).json({ message: 'Invalid Credentials '});
+            return res.status(400),
+            io.emit('Incorrect Password', "Incorrect Password")
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
         console.log(token);
@@ -87,54 +97,60 @@ app.post('/login', async (req, res) => {
         res.redirect('/Html/profile.html');
     }, "2000");
     } catch (error) {
-        console.error('Error logging in:', error);
-        res.status(500).json({ message: 'Server Error'});
+        return res.status(500),
+        io.emit('Server Error', "Server Error")
     }
 });
 
 app.post('/update', verifyToken, async (req, res) => {
-
-    const id = req.cookies.userid
-    console.log(id);
     
         try {
-            const user = await User.findOne({ where: { id: id } });
-            console.log(user);
-            if (!user) {
-                return res.status(400).json({ message: 'Invalid Credentials' });
-            }
+
+            const id = req.cookies.userid
             const { username, email } = req.body;
-            newUserData = { username, email};
-            var userId = { where : {id: req.user.userId} }; 
+            console.log(id);
+
+            const currentUsername = await User.findOne({ where: { username } });
+            if (currentUsername) {
+                return res.status(304),
+                io.emit('Username Already Exists', "Username Already Exists")
+            }
+                const currentEmail= await User.findOne({ where: { email } });
+                console.log(currentEmail)
+                if (currentEmail) {
+                    return res.status(304),
+                    io.emit('Email Already Exists', "Email Already Exists")
+                }
+            var userId = { where : {id: id} }; 
             await User.update( newUserData, userId, {
                 new: true,
                 runValidators: true,
             });
           const newData = "User Information Updated";
           // io.emit triggers listeners for all connected clients
-    res.status(204).json({status: "succes", results: {newUserData}});
+    res.status(204);
     io.emit('clientSocketName2', newData);
     console.log("User Information Updated");
 }
 catch (error) {
-    console.error('Error Updating UserInfo:', error);
-    res.status(500).json({ message: 'Server Error' });
+    return res.status(500),
+    io.emit('Server Error', "Server Error")
 }
 });
 
 app.post('/password', verifyToken, async (req, res) => {
-
+     
+    const { password, NewPassword } = req.body;
     const id = req.cookies.userid
     console.log(id);
-    
+    console.log({ password, NewPassword });
         try {
-            const user = await User.findOne({ where: { id: id } });
-            console.log(user);
-            if (!user) {
-                return res.status(400).json({ message: 'Invalid Credentials' });
+            if (password === NewPassword) {
+                return res.status(400),
+                io.emit('Cannot Use Same Password', "Cannot Use Same Password")
             }
-            const { password, NewPassword } = req.body;
-            newUserData = { NewPassword };
+            const hashedPassword = await bcrypt.hash(`${NewPassword}`, 10);
+            newUserData = {password:  hashedPassword };
             var userId = { where : {id: req.user.userId} }; 
             await User.update( newUserData, userId, {
                 new: true,
@@ -148,7 +164,8 @@ app.post('/password', verifyToken, async (req, res) => {
 }
 catch (error) {
     console.error('Error Registering User:', error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500);
+    io.emit('Server Error', "Server Error")
 }
 });
 
@@ -161,13 +178,14 @@ app.get('/userinfo', verifyToken, async (req, res) => {
         const user = await User.findOne({ where: { id } });
         console.log(user);
         if (!user) {
-            return res.status(400).json({ message: 'Invalid Credentials' });
+            return res.status(404);
         }
         return res.status(204).json(user);
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
-        res.status(500).json({ message: 'Server Error'});
+        res.status(500);
+        io.emit('Server Error', "Server Error")
     }
 });
 

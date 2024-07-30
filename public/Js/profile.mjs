@@ -21,6 +21,39 @@ socket.on('clientSocketName3', data => {
   })
 });
 
+socket.on('Username Already Exists', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Username Already Exists")
+});
+
+socket.on('Email Already Exists', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Email Already Exists")
+});
+
+socket.on('Cannot Use Same Password', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Cannot Use Same Password")
+});
+
 
 
 
