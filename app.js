@@ -140,7 +140,8 @@ catch (error) {
 app.get('/userinfo', verifyToken, async (req, res) => {
     try {
         const { id } = req.cookies.userid;
-        const user = await User.findOne({ where: { id } });
+        console.log(id);
+        const user = await User.findOne({ where: id });
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
