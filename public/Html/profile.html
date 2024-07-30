@@ -27,42 +27,42 @@
                         <!-- Contact detail -->
                         <hr class="border-light m-0">
                         <div class="card-body">
-                          <form action="https://project-3-fiv4.onrender.com:10000/updateMe" method="POST" id="userUpdate">
-                            <div class="form-group">
-                                <label class="form-label">Username</label>
-                                <input type="text" class="form-control mb-1" name="username" id="currentUsername">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Email</label>
-                                <input type="text" class="form-control mb-1" name="email" id="currentEmail">
-                            </div>
-                            <div class="text-right mt-3">
-                                <button type="submit" class="btn btn-primary" id="firstUpdate">Save changes</button>&nbsp;
-                                <button type="button" class="btn btn-default">Cancel</button>
-                            </div>
-                          </form>
+                            <form action="/update" method="POST" id="userUpdate">
+                                <div class="form-group">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control mb-1" name="username" id="currentUsername" autocomplete="on">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control mb-1" name="email" id="currentEmail" autocomplete="on">
+                                </div>
+                                <div class="text-right mt-3">
+                                    <button type="submit" class="btn btn-primary" id="firstUpdate">Save changes</button>&nbsp;
+                                    <button type="button" class="btn btn-default">Cancel</button>
+                                </div>
+                              </form>
                         </div>
 
                         <!-- change password -->
                         <div class="card-body pb-2">
-                            <form action="https://project-3-fiv4.onrender.com:10000/updateMe" method="POST" id="passwordUpdate">
-                              <div class="form-group">
-                                  <label class="form-label">Current password*</label>
-                                  <input type="password" class="form-control" id="currentPassword">
-                              </div>
-                              <div class="form-group">
-                                  <label class="form-label">New password*</label>
-                                  <input type="password" class="form-control">
-                              </div>
-                              <div class="form-group">
-                                  <label class="form-label">Repeat new password*</label>
-                                  <input type="password" class="form-control">
-                              </div>
-                              <div class="text-right mt-3">
-                                  <button type="submit" class="btn btn-primary" id="secondUpdate">Save changes</button>&nbsp;
-                                  <button type="button" class="btn btn-default">Cancel</button>
-                              </div>
-                            </form>
+                            <form action="/password" method="POST" id="passwordUpdate">
+                                <div class="form-group">
+                                    <label class="form-label">Current password</label>
+                                    <input type="password" class="form-control" id="currentPassword" name="password" autocomplete="on">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">New password</label>
+                                    <input type="password" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Repeat new password</label>
+                                    <input type="password" class="form-control" name="NewPassword">
+                                </div>
+                                <div class="text-right mt-3">
+                                    <button type="submit" class="btn btn-primary" id="secondUpdate">Save changes</button>&nbsp;
+                                    <button type="button" class="btn btn-default">Cancel</button>
+                                </div>
+                              </form>
                           </div>
                     </div> <!-- Row END -->
                     <!-- button -->
