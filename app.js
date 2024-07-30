@@ -183,13 +183,13 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     try {
         const id = req.cookies.userid
         user = {id: id.userid};
+        const UserInfo = await User.findOne({ where: { user } });
         console.log(user);
-        const user = await User.findOne({ where: { user } });
-        console.log(user);
-        if (!user) {
+        console.log(UserInfo);
+        if (!UserInfo) {
             return res.status(404);
         }
-        return res.status(204, user);
+        return res.status(204, UserInfo);
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
@@ -223,7 +223,7 @@ app.get('/deleteuser', verifyToken, async (req, res) => {
 
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
-    const token = req.header('Authorization');
+    const token = req.cookies.token
     if (!token) {
         return res.status(401).json({ message: 'Access Denied'});
     } try {
