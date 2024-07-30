@@ -90,15 +90,15 @@ app.post('/login', async (req, res) => {
 app.post('/update', verifyToken, async (req, res) => {
     
         try {
-            var Id = req.cookies.userid
-            console.log(Id);
-            const user = await User.findOne({ where: { Id } });
+            var id = req.cookies.userid
+            console.log(id);
+            const user = await User.findOne({ where: { id } });
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials' });
             }
      const { username, email } = req.body;    
     newUserData = { username, email};
-    await user.update( userId, newUserData, {
+    await user.update( id, newUserData, {
         new: true,
         runValidators: true,
     });
@@ -118,7 +118,7 @@ app.post('/password', verifyToken, async (req, res) => {
     
     try {
     const { CurrentPassword, NewPassword } = req.body;
-    const user = await User.findOne({ where: { CurrentPassword } });
+    const user = await User.password.findOne({ where: { CurrentPassword } });
     const isPasswordMatch = await bcrypt.compare(CurrentPassword, user.password);
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
@@ -147,7 +147,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     console.log(id);
     
     try {
-        const user = await User.findOne({ where: id });
+        const user = await User.id.findOne({ where: { id } });
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
