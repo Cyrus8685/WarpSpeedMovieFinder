@@ -21,8 +21,75 @@ socket.on('clientSocketName', data => {
     text: `${data}`,
     icon: "success"
   }),
-  console.log("Success")
+  console.log("Registration Complete")
 });
+
+socket.on('Server Error', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Server Error")
+});
+
+socket.on('Email Address Not Found', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Email Address Not Found")
+});
+
+socket.on('Incorrect Password', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Incorrect Password")
+});
+
+socket.on('Username Already Exists', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Username Already Exists")
+});
+
+socket.on('Email Already Exists', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Email Already Exists")
+});
+
+socket.on('Cannot Use Same Password', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Cannot Use Same Password")
+});
+
 /*const baseUrl = 'http://localhost:4000'
 
 async function postUser(e) {

@@ -21,20 +21,59 @@ socket.on('clientSocketName3', data => {
   })
 });
 
+socket.on('Username Already Exists', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`
+}),
+
+  console.log("Username Already Exists")
+});
+
+socket.on('Email Already Exists', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Email Already Exists")
+});
+
+socket.on('Cannot Use Same Password', data => {
+  // any code here will execute when this socket is triggered
+  Swal.fire({
+    icon: "error",
+    title: "Oops...",
+    text: `${data}`,
+  });
+
+  console.log("Cannot Use Same Password")
+});
+
 
 
 
 $( document ).ready(function () {
 var data = {};
-                    console.log('select_link clicked');
     fetch('/userinfo', {
         type: 'GET',
+        body: JSON.stringify({        
+          "userid": process.env.User_ID,
+          "iat": 1707012086,
+          "exp": 1707015686,}),
         data: JSON.stringify(data),
         contentType: 'application/json',					
         success: function () {
-            data.username = document.getElementById('currentUsername').innerHTML,
-            data.email = document.getElementById('currentEmail').innerHTML,
-            console.log(data);
-        },
+          data.username = document.getElementById('currentUsername').innerHTML,
+          data.email = document.getElementById('currentEmail').innerHTML,
+          console.log("User Information Retrieved")
+      }
 
-    })});
+    })
+  
+  });

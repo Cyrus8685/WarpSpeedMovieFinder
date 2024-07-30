@@ -36,13 +36,25 @@ sequelize
 //User Registration
 app.post("/register", async function (req, res) {
 
+    const { username, email, password } = req.body;
+
     io.on('connection', socket => {
         // any code here will run upon the 'connection' event
         console.log(`user: ${socket.id} connected`);
-          })
+          });
 
-    try {
-        const { username, email, password } = req.body;
+         try {
+            const currentEmail = await User.findOne({ where: { email } });
+            console.log(currentEmail.email)
+            if (currentEmail.email) {
+                return res.status(304),
+                io.emit('Email Already Exists', "Email Already Exists")
+            }
+        const currentUsername = await User.findOne({ where: { username } });
+        if (currentUsername.username) {
+            return res.status(304),
+            io.emit('Username Already Exists', "Username Already Exists")
+        }
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
   /* Add your listeners here! */
@@ -57,7 +69,8 @@ app.post("/register", async function (req, res) {
         io.emit('clientSocketName', newData);
     } catch (error) {
         console.error('Error Registering User:', error);
-        res.status(500).json({ message: 'Server Error' });
+        return res.status(500),
+        io.emit('Server Error', "Server Error")
     }
 });
 
@@ -67,103 +80,151 @@ app.post('/login', async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid Credentials' });
+            return res.status(400),
+            io.emit('Email Address Not Found', "Email Address Not Found")
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            return res.status(400).json({ message: 'Invalid Credentials '});
+            return res.status(400),
+            io.emit('Incorrect Password', "Incorrect Password")
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
+        process.env.User_ID = user.id
         console.log(token);
         console.log(user.id);
         res.cookie('token', `Bearer ${token}`, { httpOnly: true });
         res.cookie('userid', `${user.id}`, { httpOnly: true });
         setTimeout(() => {
-        res.redirect('/Html/profile.html');
-    }, "3000");
+        res.status(204).redirect('/Html/profile.html');
+    }, "2000");
     } catch (error) {
-        console.error('Error logging in:', error);
-        res.status(500).json({ message: 'Server Error'});
+        return res.status(500),
+        io.emit('Server Error', "Server Error")
     }
 });
 
 app.post('/update', verifyToken, async (req, res) => {
     
         try {
-            var Id = req.cookies.userid
-            console.log(Id);
-            const user = await User.findOne({ where: { Id } });
-            if (!user) {
-                return res.status(400).json({ message: 'Invalid Credentials' });
+
+            const id = req.cookies.userid
+            const { username, email } = req.body;
+            console.log(id);
+
+            const currentUsername = await User.findOne({ where: { username } });
+            if (currentUsername.username) {
+                return res.status(304),
+                io.emit('Username Already Exists', "Username Already Exists")
             }
-     const { username, email } = req.body;    
-    newUserData = { username, email};
-    await user.update( userId, newUserData, {
-        new: true,
-        runValidators: true,
-    });
+                const currentEmail= await User.findOne({ where: { email } });
+                console.log(currentEmail.email)
+                if (currentEmail.email) {
+                    return res.status(304),
+                    io.emit('Email Already Exists', "Email Already Exists")
+                }
+            var userId = { where : {id: id} }; 
+            await User.update( newUserData, userId, {
+                new: true,
+                runValidators: true,
+            });
           const newData = "User Information Updated";
           // io.emit triggers listeners for all connected clients
-    res.status(204).json({status: "succes", results: {newUserData}});
+    res.status(204);
     io.emit('clientSocketName2', newData);
     console.log("User Information Updated");
 }
 catch (error) {
-    console.error('Error Updating UserInfo:', error);
-    res.status(500).json({ message: 'Server Error' });
+    return res.status(500),
+    io.emit('Server Error', "Server Error")
 }
 });
 
 app.post('/password', verifyToken, async (req, res) => {
-    
-    try {
-    const { CurrentPassword, NewPassword } = req.body;
-    const user = await User.findOne({ where: { CurrentPassword } });
-    const isPasswordMatch = await bcrypt.compare(CurrentPassword, user.password);
-    if (!isPasswordMatch) {
-        return res.status(400).json({ message: 'Invalid Password'});
-    }
-    newUserData = { NewPassword };
-    var userId = req.cookies.userid
-    await user.update( userId, newUserData, {
-        new: true,
-        runValidators: true,
-    });
+     
+    const { password, NewPassword } = req.body;
+    const userid = req.cookies.userid
+    id = {id: userid};
+    console.log(id);
+    console.log({ password, NewPassword });
+        try {
+            const user = await User.findOne({ where: { id } });
+            const isPasswordMatch = await bcrypt.compare(password, user.password);
+            if (!isPasswordMatch) {
+                return res.status(400),
+                io.emit('Incorrect Password', "Incorrect Password")
+            }
+
+            if (password === NewPassword) {
+                return res.status(400),
+                io.emit('Cannot Use Same Password', "Cannot Use Same Password")
+            }
+            const hashedPassword = await bcrypt.hash(`${NewPassword}`, 10);
+            newUserData = {password:  hashedPassword };
+            var userId = { where : {id: id} }; 
+            await User.update( newUserData, userId, {
+                new: true,
+                runValidators: true,
+            });
       const newData = "User Password Updated";
           // io.emit triggers listeners for all connected clients
-    res.status(200).json({status: "succes", results: {newUserData}});
+    res.status(204).json({status: "succes", results: {newUserData}});
     io.emit('clientSocketName3', newData);
-    console.log("User Information Updated");
+    console.log("User Password Updated");
 }
 catch (error) {
     console.error('Error Registering User:', error);
-    res.status(500).json({ message: 'Server Error' });
+    res.status(500);
+    io.emit('Server Error', "Server Error")
 }
 });
 
 app.get('/userinfo', verifyToken, async (req, res) => {
     
-    const { id } = req.cookies.userid
+    const userid = req.cookies.userid
+    id = {id: userid};
     console.log(id);
     
     try {
-        const user = await User.findOne({ where: id });
+        const user = await User.findOne({ where: { id } });
+        console.log(user);
         if (!user) {
-            return res.status(400).json({ message: 'Invalid Credentials' });
+            return res.status(404);
         }
-        data = { user };
-        return res.status(204).json(data);
+        return res.status(204, user);
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
-        res.status(500).json({ message: 'Server Error'});
+        res.status(500);
+        io.emit('Server Error', "Server Error")
+    }
+});
+
+app.get('/deleteuser', verifyToken, async (req, res) => {
+    
+    const userid = req.cookies.userid
+    id = {id: userid};
+    console.log(id);
+    
+    try {
+        const user = await User.findOne({ where: { id } });
+        console.log(user);
+        var userId = { where : {id} }; 
+        await User.deletefrom( newUserData, userId, {
+            new: true,
+            runValidators: true,
+        });
+        res.status(204).redirect('/index.html');
+    
+    }   catch (error) {
+        console.error('Error Fetching User Info:', error);
+        res.status(500);
+        io.emit('Server Error', "Server Error")
     }
 });
 
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
-    const token = req.cookies.token
-    console.log(token);
+    const token = req.header('Authorization');
     if (!token) {
         return res.status(401).json({ message: 'Access Denied'});
     } try {
