@@ -87,7 +87,7 @@ app.post('/update', verifyToken, async (req, res) => {
     
         try {
             const { username, email } = req.body;
-            var userId = req.cookies.id
+            var userId = req.cookies.userid
             const user = await User.findOne({ where: { userId } });
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials' });
@@ -120,7 +120,7 @@ app.post('/password', verifyToken, async (req, res) => {
         return res.status(400).json({ message: 'Invalid Password'});
     }
     newUserData = { NewPassword };
-    var userId = req.cookies.id
+    var userId = req.cookies.userid
     await User.update( userId, newUserData, {
         new: true,
         runValidators: true,
@@ -139,7 +139,7 @@ catch (error) {
 
 app.get('/userinfo', verifyToken, async (req, res) => {
     try {
-        const { id } = req.cookies.id
+        const { id } = req.cookies.userid;
         const user = await User.findOne({ where: { id } });
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
