@@ -95,13 +95,13 @@ app.post('/update', verifyToken, async (req, res) => {
     console.log(id);
     
         try {
-            const user = await User.findOne({ where: { id } });
+            const user = await User.findOne({ where: { id: id } });
             console.log(user);
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials' });
             }
      const { username, email } = req.body;   
-    await User.update( username, email);
+    await User.update((username, email), id);
           const newData = "User Information Updated";
           // io.emit triggers listeners for all connected clients
     res.status(204).json({status: "succes", results: {newUserData}});
@@ -119,7 +119,7 @@ app.post('/password', verifyToken, async (req, res) => {
    const id = req.cookies.userid
     console.log(id);
     try {
-    const { password, NewPassword } = req.body;
+    var { password, NewPassword } = req.body;
     const user = await User.findOne({ where: { id } });
     console.log(user);
     const isPasswordMatch = await bcrypt.compare(password, user.password);
@@ -127,7 +127,7 @@ app.post('/password', verifyToken, async (req, res) => {
         return res.status(400).json({ message: 'Invalid Password'});
     }
     password = NewPassword
-    await User.update(password);
+    await User.update(password, id);
       const newData = "User Password Updated";
           // io.emit triggers listeners for all connected clients
     res.status(200).json({status: "succes", results: {newUserData}});
