@@ -43,7 +43,7 @@ app.post("/register", async function (req, res) {
           const { username, email, password } = req.body;
           const user = await User.findOne({ where: { email } });
          try {
-            const isEmailMatch = await compare(email, user.email);
+            const isEmailMatch = await email.compare(email, user.email);
             if (isEmailMatch) {
                 return res.status(400).json({ message: 'Email is Already Registered '});
             }
