@@ -40,10 +40,11 @@ app.post("/register", async function (req, res) {
         // any code here will run upon the 'connection' event
         console.log(`user: ${socket.id} connected`);
           })
-          const { username, email, password } = req.body;
-          const user = await User.findOne({ where: { email } });
+
          try {
-            const isEmailMatch = await email.compare(email, user.email);
+            const { username, email, password } = req.body;
+            const user = await User.findOne({ where: { email } });
+            const isEmailMatch = await user.compare(email, user.email);
             if (isEmailMatch) {
                 return res.status(400).json({ message: 'Email is Already Registered '});
             }
