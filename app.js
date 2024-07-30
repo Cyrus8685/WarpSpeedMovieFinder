@@ -40,8 +40,10 @@ app.post("/register", async function (req, res) {
         // any code here will run upon the 'connection' event
         console.log(`user: ${socket.id} connected`);
           })
-
-    try {
+          const user = await User.findOne({ where: { email } });
+          const isEmailMatch = await compare(email, user.email);
+          if (!isEmailMatch) 
+            try {
         const { username, email, password } = req.body;
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
@@ -80,7 +82,7 @@ app.post('/login', async (req, res) => {
         res.cookie('userid', `${user.id}`, { httpOnly: true });
         setTimeout(() => {
         res.redirect('/Html/profile.html');
-    }, "3000");
+    }, "2000");
     } catch (error) {
         console.error('Error logging in:', error);
         res.status(500).json({ message: 'Server Error'});
@@ -98,7 +100,7 @@ app.post('/update', verifyToken, async (req, res) => {
             }
      const { username, email } = req.body;    
     newUserData = { username, email};
-    await user.update( id, newUserData, {
+    await User.update( user.id, newUserData, {
         new: true,
         runValidators: true,
     });
@@ -117,15 +119,15 @@ catch (error) {
 app.post('/password', verifyToken, async (req, res) => {
     
     try {
-    const { CurrentPassword, NewPassword } = req.body;
-    const user = await User.password.findOne({ where: { CurrentPassword } });
-    const isPasswordMatch = await bcrypt.compare(CurrentPassword, user.password);
+    const { password, NewPassword } = req.body;
+    const userid = req.cookies.userid
+    console.log(userid)
+    const user = await User.findOne({ where: { userid } });
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
     }
-    newUserData = { NewPassword };
-    var userId = req.cookies.userid
-    await user.update( userId, newUserData, {
+    await User.update( user.Id, NewPassword, {
         new: true,
         runValidators: true,
     });
@@ -147,12 +149,11 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     console.log(id);
     
     try {
-        const user = await User.id.findOne({ where: { id } });
+        const user = await User.findOne({ where: { id } });
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
-        data = { user };
-        return res.status(204).json(data);
+        return res.status(204).json(user);
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
