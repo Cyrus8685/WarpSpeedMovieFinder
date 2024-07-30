@@ -131,7 +131,7 @@ app.post('/password', verifyToken, async (req, res) => {
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
     }
-    newUserData = {NewPassword};
+    newUserData = { NewPassword };
     var userId = { where : {id: id} }; 
     await User.update( newUserData, userId, {
         new: true,
