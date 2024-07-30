@@ -179,13 +179,12 @@ catch (error) {
 });
 
 app.get('/userinfo', verifyToken, async (req, res) => {
-    
-    const userid = req.cookies.userid
-    id = {id: userid};
-    console.log(id);
-    
+        
     try {
-        const user = await User.findOne({ where: { id } });
+        const id = req.cookies.userid
+        user = {id: id.userid};
+        console.log(user);
+        const user = await User.findOne({ where: { user } });
         console.log(user);
         if (!user) {
             return res.status(404);
