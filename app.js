@@ -92,7 +92,7 @@ app.post('/login', async (req, res) => {
 app.post('/update', verifyToken, async (req, res) => {
     
         try {
-            var id = req.cookies.userid
+            const  { id } = req.cookies.userid
             console.log(id);
             const user = await User.findOne({ where: { id } });
             if (!user) {
@@ -120,9 +120,9 @@ app.post('/password', verifyToken, async (req, res) => {
     
     try {
     const { password, NewPassword } = req.body;
-    const userid = req.cookies.userid
-    console.log(userid)
-    const user = await User.findOne({ where: { userid } });
+    const id = req.cookies.userid;
+    console.log(id);
+    const user = await User.findOne({ where: { id } });
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
         return res.status(400).json({ message: 'Invalid Password'});
@@ -145,7 +145,7 @@ catch (error) {
 
 app.get('/userinfo', verifyToken, async (req, res) => {
     
-    const { id } = req.cookies.userid
+    const id = req.cookies.userid
     console.log(id);
     
     try {
