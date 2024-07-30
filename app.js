@@ -75,7 +75,7 @@ app.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
-        if (isPasswordMatch) {
+        if (!isPasswordMatch) {
             return res.status(400).json({ message: 'Invalid Credentials '});
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
