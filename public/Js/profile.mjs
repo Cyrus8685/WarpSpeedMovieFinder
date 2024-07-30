@@ -59,7 +59,7 @@ socket.on('Cannot Use Same Password', data => {
 
 
 $( document ).ready(function () {
-var data = {};
+var data = {}
     fetch('/userinfo', {
         type: 'GET',
         body: JSON.stringify({        
