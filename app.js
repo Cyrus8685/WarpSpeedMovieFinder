@@ -49,6 +49,7 @@ app.post("/register", async function (req, res) {
         }
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
         await User.create({ username, email, password: hashedPassword });
+        console.log(User);
   /* Add your listeners here! */
   /* Add your listeners here! */
 
