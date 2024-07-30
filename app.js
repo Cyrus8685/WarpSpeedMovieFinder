@@ -90,15 +90,15 @@ app.post('/login', async (req, res) => {
 app.post('/update', verifyToken, async (req, res) => {
     
         try {
-            const { username, email } = req.body;
-            var userId = req.cookies.userid
-            const user = await User.findOne({ where: { userId } });
+            var Id = req.cookies.userid
+            console.log(Id);
+            const user = await User.findOne({ where: { Id } });
             if (!user) {
                 return res.status(400).json({ message: 'Invalid Credentials' });
             }
-        
+     const { username, email } = req.body;    
     newUserData = { username, email};
-    await User.update( userId, newUserData, {
+    await user.update( userId, newUserData, {
         new: true,
         runValidators: true,
     });
@@ -109,7 +109,7 @@ app.post('/update', verifyToken, async (req, res) => {
     console.log("User Information Updated");
 }
 catch (error) {
-    console.error('Error Registering User:', error);
+    console.error('Error Updating UserInfo:', error);
     res.status(500).json({ message: 'Server Error' });
 }
 });
@@ -125,7 +125,7 @@ app.post('/password', verifyToken, async (req, res) => {
     }
     newUserData = { NewPassword };
     var userId = req.cookies.userid
-    await User.update( userId, newUserData, {
+    await user.update( userId, newUserData, {
         new: true,
         runValidators: true,
     });
@@ -142,15 +142,17 @@ catch (error) {
 });
 
 app.get('/userinfo', verifyToken, async (req, res) => {
+    
+    const { id } = req.cookies.userid
+    console.log(id);
+    
     try {
-        const { id } = req.cookies.userid;
-        console.log(id);
         const user = await User.findOne({ where: id });
         if (!user) {
             return res.status(400).json({ message: 'Invalid Credentials' });
         }
         data = { user };
-        return res.status({data});
+        return res.status(204).json(data);
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);

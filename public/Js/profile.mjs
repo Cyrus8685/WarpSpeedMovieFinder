@@ -34,7 +34,7 @@ var data = {};
         success: function () {
             data.username = document.getElementById('currentUsername').innerHTML,
             data.email = document.getElementById('currentEmail').innerHTML,
-            console.log("User Info Obtained")
+            console.log(data);
         },
 
     })});
