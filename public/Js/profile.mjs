@@ -59,9 +59,9 @@ var data = {};
     fetch('/userinfo', {
         type: 'GET',
         body: {        
-          "userid": process.env.User_ID,
+          "userid": req.cookies.userid,
           "iat": 1707012086,
-          "exp": 1707015686,
+          "exp": 1707015686
         },
         data: JSON.stringify(data),
         contentType: 'application/json',					
