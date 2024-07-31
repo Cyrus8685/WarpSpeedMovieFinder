@@ -47,15 +47,15 @@
                         <div class="card-body pb-2">
                             <form action="/password" method="POST" id="passwordUpdate">
                                 <div class="form-group">
-                                    <label class="form-label">Current password</label>
+                                    <label class="form-label">Current password*</label>
                                     <input type="password" class="form-control" id="currentPassword" name="password" autocomplete="on">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">New password</label>
+                                    <label class="form-label">New password*</label>
                                     <input type="password" class="form-control">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Repeat new password</label>
+                                    <label class="form-label">Repeat new password*</label>
                                     <input type="password" class="form-control" name="NewPassword">
                                 </div>
                                 <div class="text-right mt-3">
@@ -66,7 +66,7 @@
                           </div>
                     </div> <!-- Row END -->
                     <!-- button -->
-                <form action="https://project-3-fiv4.onrender.com:10000/deleteuser" method="POST" id="deleteuser">
+                <form action="/deleteuser" method="POST" id="deleteuser">
                     <div class="gap-3 d-md-flex justify-content-md-end text-center">
                         <button type="submit" class="btn btn-danger btn-lg">Delete profile</button>
                     </div>
@@ -81,7 +81,8 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO" crossorigin="anonymous"></script>
-    <base type="application/javascript"  rel="stylesheet" href="/CSS/profilestyle.css">
+    <script src="https://cdn.jsdelivr.net/npm/cookieparser@0.1.0/js/cookieparser.min.js"></script>
+    <link rel="stylesheet" href="/CSS/profilestyle.css">
     <script type="module" src="/Js/profile.mjs"></script>
 </body>
 
