@@ -16,7 +16,7 @@ const io = require('socket.io')(http, {
       origin: "https://project-3-fiv4.onrender.com",
       methods: ["GET", "POST", "PATCH"]
     }});
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json()); 
