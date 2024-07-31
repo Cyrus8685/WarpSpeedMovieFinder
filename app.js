@@ -47,12 +47,12 @@ app.post("/register", async function (req, res) {
             const currentEmail = await User.findOne({ where: { email } });
             console.log(currentEmail.email)
             if (currentEmail.email) {
-                return res.status(304),
+                return res.status(204),
                 io.emit('Email Already Exists', "Email Already Exists")
             }
         const currentUsername = await User.findOne({ where: { username } });
         if (currentUsername.username) {
-            return res.status(304),
+            return res.status(204),
             io.emit('Username Already Exists', "Username Already Exists")
         }
         const hashedPassword = await bcrypt.hash(`${password}`, 10);
@@ -69,10 +69,10 @@ app.post("/register", async function (req, res) {
         io.emit('clientSocketName', newData);
     } catch (error) {
         console.error('Error Registering User:', error);
-        return res.status(500),
+        return res.status(204),
         io.emit('Server Error', "Server Error")
     }
-});
+})
 
 //User Login
 app.post('/login', async (req, res) => {
@@ -80,12 +80,12 @@ app.post('/login', async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            return res.status(400),
+            return res.status(204),
             io.emit('Email Address Not Found', "Email Address Not Found")
         }
         const isPasswordMatch = await bcrypt.compare(password, user.password);
         if (!isPasswordMatch) {
-            return res.status(400),
+            return res.status(204),
             io.emit('Incorrect Password', "Incorrect Password")
         }
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
@@ -98,31 +98,32 @@ app.post('/login', async (req, res) => {
         res.status(204).redirect('/Html/profile.html');
     }, "2000");
     } catch (error) {
-        return res.status(500),
+        return res.status(204),
         io.emit('Server Error', "Server Error")
     }
-});
+})
 
 app.post('/update', verifyToken, async (req, res) => {
     
         try {
 
-            const CookieId = req.cookies.userid
+            const id = req.cookies.userid;
             const { username, email } = req.body;
-            console.log(CookieId);
+            console.log(id);
 
-            const currentUsername = await User.findOne({ where: { username } });
-            if (currentUsername.username) {
-                return res.status(304),
+            const currentUserInfo = await User.findOne({ where: { id } });
+            console.log(currentUserInfo);
+            console.log(currentUserInfo.email);
+            console.log(currentUserInfo.username);
+            if (currentUserInfo.username === username) {
+                return res.status(204),
                 io.emit('Username Already Exists', "Username Already Exists")
-            }
-                const currentEmail= await User.findOne({ where: { email } });
-                console.log(currentEmail.email)
-                if (currentEmail.email) {
-                    return res.status(304),
+            };
+            if (currentUserInfo.email === email) {
+                    return res.status(204),
                     io.emit('Email Already Exists', "Email Already Exists")
-                }
-            var userId = { where : {id: CookieId} }; 
+                };
+            var userId = { where : {id: id} };
             newUserData = { username, email };
             await User.update( newUserData, userId, {
                 new: true,
@@ -135,33 +136,32 @@ app.post('/update', verifyToken, async (req, res) => {
     console.log("User Information Updated");
 }
 catch (error) {
-    return res.status(500),
+    return res.status(204),
     io.emit('Server Error', "Server Error")
 }
-});
+})
 
 app.post('/password', verifyToken, async (req, res) => {
-     
-    const { password, NewPassword } = req.body;
-    const userid = req.cookies.userid
-    PasswordId = {id: userid};
-    console.log(id);
-    console.log({ password, NewPassword });
+    
         try {
+            const { password, NewPassword } = req.body;
+            const id = req.cookies.userid
+            console.log(id);
+            console.log({ password, NewPassword });
             const user = await User.findOne({ where: { id } });
             const isPasswordMatch = await bcrypt.compare(password, user.password);
             if (!isPasswordMatch) {
-                return res.status(400),
+                return res.status(204),
                 io.emit('Incorrect Password', "Incorrect Password")
-            }
+            };
 
-            if (password === NewPassword) {
-                return res.status(400),
+            if (password === user.password) {
+                return res.status(204),
                 io.emit('Cannot Use Same Password', "Cannot Use Same Password")
-            }
+            };
             const hashedPassword = await bcrypt.hash(`${NewPassword}`, 10);
             newUserData = { password:  hashedPassword };
-            var userId = { where : { id: PasswordId } }; 
+            var userId = { where : {id: id} };
             await User.update( newUserData, userId, {
                 new: true,
                 runValidators: true,
@@ -174,10 +174,10 @@ app.post('/password', verifyToken, async (req, res) => {
 }
 catch (error) {
     console.error('Error Registering User:', error);
-    res.status(500);
+    res.status(204);
     io.emit('Server Error', "Server Error")
 }
-});
+})
 
 app.get('/userinfo', verifyToken, async (req, res) => {
         
@@ -194,30 +194,24 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
-        res.status(500);
+        res.status(204);
         io.emit('Server Error', "Server Error")
     }
-});
+})
 
-app.get('/deleteuser', verifyToken, async (req, res) => {
-    
-    const userid = req.cookies.userid
-    id = {id: userid};
-    console.log(id);
-    
+app.post('/deleteuser', verifyToken, async (req, res) => {
+        
     try {
+        const id = req.cookies.userid
+        console.log(id);
         const user = await User.findOne({ where: { id } });
         console.log(user);
-        var userId = { where : {id} }; 
-        await User.deletefrom( newUserData, userId, {
-            new: true,
-            runValidators: true,
-        });
+        await user.destroy();
         res.status(204).redirect('/index.html');
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
-        res.status(500);
+        res.status(204);
         io.emit('Server Error', "Server Error")
     }
 });
