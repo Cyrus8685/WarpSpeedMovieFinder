@@ -55,17 +55,14 @@ socket.on('Cannot Use Same Password', data => {
   console.log("Cannot Use Same Password")
 });
 
-
-
-
-$( document ).ready(function () {
 var data = {};
     fetch('/userinfo', {
         type: 'GET',
-        body: JSON.stringify({        
+        body: {        
           "userid": process.env.User_ID,
           "iat": 1707012086,
-          "exp": 1707015686,}),
+          "exp": 1707015686,
+        },
         data: JSON.stringify(data),
         contentType: 'application/json',					
         success: function () {
@@ -75,5 +72,3 @@ var data = {};
       }
 
     })
-  
-  });

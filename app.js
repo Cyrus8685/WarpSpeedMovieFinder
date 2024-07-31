@@ -107,7 +107,7 @@ app.post('/update', verifyToken, async (req, res) => {
     
         try {
 
-            const id = req.cookies.userid
+            const CookieId = req.cookies.userid
             const { username, email } = req.body;
             console.log(id);
 
@@ -122,7 +122,8 @@ app.post('/update', verifyToken, async (req, res) => {
                     return res.status(304),
                     io.emit('Email Already Exists', "Email Already Exists")
                 }
-            var userId = { where : {id: id} }; 
+            var userId = { where : {id: CookieId} }; 
+            newUserData = { username, email };
             await User.update( newUserData, userId, {
                 new: true,
                 runValidators: true,
@@ -143,7 +144,7 @@ app.post('/password', verifyToken, async (req, res) => {
      
     const { password, NewPassword } = req.body;
     const userid = req.cookies.userid
-    id = {id: userid};
+    PasswordId = {id: userid};
     console.log(id);
     console.log({ password, NewPassword });
         try {
@@ -159,15 +160,15 @@ app.post('/password', verifyToken, async (req, res) => {
                 io.emit('Cannot Use Same Password', "Cannot Use Same Password")
             }
             const hashedPassword = await bcrypt.hash(`${NewPassword}`, 10);
-            newUserData = {password:  hashedPassword };
-            var userId = { where : {id: id} }; 
+            newUserData = { password:  hashedPassword };
+            var userId = { where : { id: PasswordId } }; 
             await User.update( newUserData, userId, {
                 new: true,
                 runValidators: true,
             });
       const newData = "User Password Updated";
           // io.emit triggers listeners for all connected clients
-    res.status(204).json({status: "succes", results: {newUserData}});
+    res.status(204);
     io.emit('clientSocketName3', newData);
     console.log("User Password Updated");
 }
@@ -179,18 +180,17 @@ catch (error) {
 });
 
 app.get('/userinfo', verifyToken, async (req, res) => {
-    
-    const userid = req.cookies.userid
-    id = {id: userid};
-    console.log(id);
-    
+        
     try {
-        const user = await User.findOne({ where: { id } });
+        const id = req.cookies.userid
+        user = {id: id.userid};
+        const UserInfo = await User.findOne({ where: { user } });
         console.log(user);
-        if (!user) {
+        console.log(UserInfo);
+        if (!UserInfo) {
             return res.status(404);
         }
-        return res.status(204, user);
+        return res.status(204, UserInfo);
     
     }   catch (error) {
         console.error('Error Fetching User Info:', error);
@@ -224,7 +224,7 @@ app.get('/deleteuser', verifyToken, async (req, res) => {
 
 // Middleware to verify JWT token
 function verifyToken(req, res, next) {
-    const token = req.header('Authorization');
+    const token = req.cookies.token
     if (!token) {
         return res.status(401).json({ message: 'Access Denied'});
     } try {
