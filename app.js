@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign({ userId: user.id }, process.env.DB_SECRET, { expiresIn: '1h' });
         process.env.User_ID = user.id
         console.log(token);
-        console.log(user.id);
+        console.log(process.env.User_ID);
         res.cookie('token', `Bearer ${token}`, { httpOnly: true });
         res.cookie('userid', `${user.id}`, { httpOnly: true });
         setTimeout(() => {
@@ -109,7 +109,7 @@ app.post('/update', verifyToken, async (req, res) => {
 
             const CookieId = req.cookies.userid
             const { username, email } = req.body;
-            console.log(id);
+            console.log(CookieId);
 
             const currentUsername = await User.findOne({ where: { username } });
             if (currentUsername.username) {
@@ -182,8 +182,8 @@ catch (error) {
 app.get('/userinfo', verifyToken, async (req, res) => {
         
     try {
-        const id = req.cookies.userid
-        user = {id: id.userid};
+        const CookieId = req.cookies.userid
+        user = {id: CookieId};
         const UserInfo = await User.findOne({ where: { user } });
         console.log(user);
         console.log(UserInfo);
