@@ -1,6 +1,6 @@
 const express = require('express');
-const sequelize = require('./db.js'); // Import Sequelize instance
-const User = require("./models/User.js")(sequelize);// Import User Model
+const mongoose = require('mongoose');
+const User = require("./models/User.js");(mongoose);// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
@@ -24,8 +24,8 @@ app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 
-sequelize
-    .sync()
+mongoose
+    .connect(process.env.DB_URL)
     .then(() => {
         console.log("Database synced");
         http.listen(process.env.PORT, () => console.log (`Server Listening on Port ${process.env.PORT}`));
