@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const User = require("./models/User.js");(mongoose);// Import User Model
+const User = require("./models/User.js");// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
@@ -36,22 +36,21 @@ mongoose
 //User Registration
 app.post("/register", async function (req, res) {
 
-    const { username, email, password } = req.body;
-
-    io.on('connection', socket => {
-        // any code here will run upon the 'connection' event
-        console.log(`user: ${socket.id} connected`);
-          });
-
          try {
+            const { username, email, password } = req.body;
+            console.log({ username, email, password })
+        
+            io.on('connection', socket => {
+                // any code here will run upon the 'connection' event
+                console.log(`user: ${socket.id} connected`);
+                  });
             const currentEmail = await User.findOne({ where: { email } });
-            console.log(currentEmail.email)
-            if (currentEmail.email) {
+            if (currentEmail) {
                 return res.status(204),
                 io.emit('Email Already Exists', "Email Already Exists")
             }
         const currentUsername = await User.findOne({ where: { username } });
-        if (currentUsername.username) {
+        if (currentUsername) {
             return res.status(204),
             io.emit('Username Already Exists', "Username Already Exists")
         }
