@@ -1,6 +1,6 @@
 const express = require('express');
-const sequelize = require('./db.js'); // Import Sequelize instance
-const User = require("./models/User.js")(sequelize);// Import User Model
+const mongoose = require('mongoose');
+const User = require("./models/User.js");// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
@@ -16,7 +16,7 @@ const io = require('socket.io')(http, {
       origin: "https://project-3-fiv4.onrender.com",
       methods: ["GET", "POST", "PATCH"]
     }});
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json()); 
@@ -24,8 +24,8 @@ app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 
-sequelize
-    .sync()
+mongoose
+    .connect(process.env.DB_URL)
     .then(() => {
         console.log("Database synced");
         http.listen(process.env.PORT, () => console.log (`Server Listening on Port ${process.env.PORT}`));
@@ -36,22 +36,21 @@ sequelize
 //User Registration
 app.post("/register", async function (req, res) {
 
-    const { username, email, password } = req.body;
-
-    io.on('connection', socket => {
-        // any code here will run upon the 'connection' event
-        console.log(`user: ${socket.id} connected`);
-          });
-
          try {
+            const { username, email, password } = req.body;
+            console.log({ username, email, password })
+        
+            io.on('connection', socket => {
+                // any code here will run upon the 'connection' event
+                console.log(`user: ${socket.id} connected`);
+                  });
             const currentEmail = await User.findOne({ where: { email } });
-            console.log(currentEmail.email)
-            if (currentEmail.email) {
+            if (currentEmail) {
                 return res.status(204),
                 io.emit('Email Already Exists', "Email Already Exists")
             }
         const currentUsername = await User.findOne({ where: { username } });
-        if (currentUsername.username) {
+        if (currentUsername) {
             return res.status(204),
             io.emit('Username Already Exists', "Username Already Exists")
         }
