@@ -1,8 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-./netflix-ui/node_modules/
-./netflix-api/node_modules/
+# dependencies module temp shown
+/node_modules
 /.pnp
 .pnp.js
 
@@ -22,7 +21,3 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-
-# added visible for now
-node_modules
