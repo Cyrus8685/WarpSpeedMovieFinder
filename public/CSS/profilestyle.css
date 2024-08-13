@@ -1,0 +1,11 @@
+body{margin-top:20px;
+    color: #9b9ca1;
+    }
+    .row {
+        display: flex;
+        justify-content: space-around;
+     }
+
+     .content-main {
+        float:left;
+      }
