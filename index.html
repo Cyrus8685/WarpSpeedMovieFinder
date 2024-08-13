@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Streaming Service</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Warpspeed Streaming</h1>
+        <div class="search-container">
+            <input type="text" id="search-bar" placeholder="Search for movies...">
+        </div>
+        <nav>
+            <button id="genre-all" class="genre-button">All</button>
+            <button id="genre-action" class="genre-button">Action</button>
+            <button id="genre-comedy" class="genre-button">Comedy</button>
+            <button id="genre-drama" class="genre-button">Drama</button>
+            <button id="genre-adventure" class="genre-button">Adventure</button>
+            <button id="genre-animation" class="genre-button">Animation</button>
+            <button id="genre-crime" class="genre-button">Crime</button>
+            <button id="genre-documentary" class="genre-button">Documentary</button>
+            <button id="genre-family" class="genre-button">Family</button>
+            <button id="genre-history" class="genre-button">History</button>
+            <button id="genre-horror" class="genre-button">Horror</button>
+            <button id="genre-mystery" class="genre-button">Mystery</button>
+            <button id="genre-sci-fi" class="genre-button">Sci-Fi</button>
+        </nav>
+    </header>
+    <main id="movie-container">
+    
+    </main>
+    <div id="movie-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="movie-title"></h2>
+            <p id="movie-synopsis"></p>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
