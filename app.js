@@ -77,6 +77,7 @@ app.post("/register", async function (req, res) {
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(email, password);
         const user = await User.findOne({ where: { email } });
         if (!user) {
             return res.status(204),
