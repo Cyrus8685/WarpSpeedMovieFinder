@@ -44,12 +44,12 @@ app.post("/register", async function (req, res) {
                 // any code here will run upon the 'connection' event
                 console.log(`user: ${socket.id} connected`);
                   });
-            const currentEmail = await User.findOne({ "user.email" : { email } });
+            const currentEmail = await User.findOne({ email : { email } });
             if (currentEmail) {
                 return res.status(204),
                 io.emit('Email Already Exists', "Email Already Exists")
             }
-        const currentUsername = await User.findOne({ "user.username": { username } });
+        const currentUsername = await User.findOne({ username: { username } });
         if (currentUsername) {
             return res.status(204),
             io.emit('Username Already Exists', "Username Already Exists")
@@ -77,7 +77,7 @@ app.post("/register", async function (req, res) {
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ "user.email": { email } });
+        const user = await User.findOne({ email: { email } });
         if (!user) {
             return res.status(204),
             io.emit('Email Address Not Found', "Email Address Not Found")
@@ -110,7 +110,7 @@ app.post('/update', verifyToken, async (req, res) => {
             const { username, email } = req.body;
             console.log(id);
 
-            const currentUserInfo = await User.findOne({ "user._id": { id } });
+            const currentUserInfo = await User.findOne({ _id: { id } });
             console.log(currentUserInfo);
             console.log(currentUserInfo.email);
             console.log(currentUserInfo.username);
@@ -122,7 +122,7 @@ app.post('/update', verifyToken, async (req, res) => {
                     return res.status(204),
                     io.emit('Email Already Exists', "Email Already Exists")
                 };
-            var userId = { "user._id" : {id: id} };
+            var userId = { _id : {id: id} };
             newUserData = { username, email };
             await User.update( newUserData, userId, {
                 new: true,
@@ -147,7 +147,7 @@ app.post('/password', verifyToken, async (req, res) => {
             const id = req.cookies.userid
             console.log(id);
             console.log({ password, NewPassword });
-            const user = await User.findOne({ "user._id": { id } });
+            const user = await User.findOne({ _id: { id } });
             const isPasswordMatch = await bcrypt.compare(password, user.password);
             if (!isPasswordMatch) {
                 return res.status(204),
@@ -160,7 +160,7 @@ app.post('/password', verifyToken, async (req, res) => {
             };
             const hashedPassword = await bcrypt.hash(`${NewPassword}`, 10);
             newUserData = { password:  hashedPassword };
-            var userId = { "user._id" : {id: id} };
+            var userId = { _id : {id: id} };
             await User.update( newUserData, userId, {
                 new: true,
                 runValidators: true,
@@ -183,7 +183,7 @@ app.get('/userinfo', verifyToken, async (req, res) => {
     try {
         const CookieId = req.cookies.userid
         user = { id: CookieId };
-        const UserInfo = await User.findOne({ "user._id": { user } });
+        const UserInfo = await User.findOne({ _id: { user } });
         console.log(user);
         console.log(UserInfo);
         if (!UserInfo) {
@@ -203,7 +203,7 @@ app.post('/deleteuser', verifyToken, async (req, res) => {
     try {
         const id = req.cookies.userid
         console.log(id);
-        const user = await User.findOne({ "user._id": { id } });
+        const user = await User.findOne({ _id: { id } });
         console.log(user);
         await user.destroy();
         res.status(204).redirect('/index.html');
