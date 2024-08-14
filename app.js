@@ -1,6 +1,5 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const User = require("./models/User.js");// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
@@ -31,6 +30,8 @@ mongoose
         http.listen(10000, () => console.log (`Server Listening on Port 10000`));
     })
     .catch(err => console.error("Error syncing database:", err));
+
+    const User = require("./models/User.js")(mongoose.connect());// Import User Model
 
 
 //User Registration
