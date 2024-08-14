@@ -1,24 +1,23 @@
-const { mongoose, Collection } = require('../db.js');
+const mongoose = require('mongoose');
 
-    const UserSchema = new mongoose.Schema(
+mongoose.connect(process.env.DB_URL);
+
+    const UserSchema =  new mongoose.Schema(
         {
             username: {
                 type: String,
                 allowNull: false,
                 unique: true,
-                Collection: "users"
             },
             email: {
                 type: String,
                 allowNull: false,
                 unique: true,
-                Collection: "users"
             },
             password: {
                 type: String,
                 allowNull: false,
                 unique: true,
-                Collection: "users"
             },
 
             },
