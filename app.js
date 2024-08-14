@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('./db.js');
+const mongoose = require('mongoose');
 const User = require("./models/User.js");// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
@@ -24,10 +24,11 @@ app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 
-mongoose.connect(process.env.DB_URL)
+mongoose
+    .connect(process.env.DB_URL)
     .then(() => {
         console.log("Database synced");
-        http.listen(process.env.PORT, () => console.log (`Server Listening on Port ${process.env.PORT}`));
+        http.listen(10000, () => console.log (`Server Listening on Port ${10000}`));
     })
     .catch(err => console.error("Error syncing database:", err));
 
@@ -43,12 +44,12 @@ app.post("/register", async function (req, res) {
                 // any code here will run upon the 'connection' event
                 console.log(`user: ${socket.id} connected`);
                   });
-            const currentEmail = await User.findOne({ email : { email } });
+            const currentEmail = await User.findOne({ where: { email } });
             if (currentEmail) {
                 return res.status(204),
                 io.emit('Email Already Exists', "Email Already Exists")
             }
-        const currentUsername = await User.findOne({ username: { username } });
+        const currentUsername = await User.findOne({ where: { username } });
         if (currentUsername) {
             return res.status(204),
             io.emit('Username Already Exists', "Username Already Exists")
@@ -76,7 +77,7 @@ app.post("/register", async function (req, res) {
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email: { email } });
+        const user = await User.findOne({ where: { email } });
         if (!user) {
             return res.status(204),
             io.emit('Email Address Not Found', "Email Address Not Found")
@@ -109,7 +110,7 @@ app.post('/update', verifyToken, async (req, res) => {
             const { username, email } = req.body;
             console.log(id);
 
-            const currentUserInfo = await User.findOne({ _id: { id } });
+            const currentUserInfo = await User.findOne({ where: { id } });
             console.log(currentUserInfo);
             console.log(currentUserInfo.email);
             console.log(currentUserInfo.username);
@@ -121,7 +122,7 @@ app.post('/update', verifyToken, async (req, res) => {
                     return res.status(204),
                     io.emit('Email Already Exists', "Email Already Exists")
                 };
-            var userId = { _id : {id: id} };
+            var userId = { where : {id: id} };
             newUserData = { username, email };
             await User.update( newUserData, userId, {
                 new: true,
@@ -146,7 +147,7 @@ app.post('/password', verifyToken, async (req, res) => {
             const id = req.cookies.userid
             console.log(id);
             console.log({ password, NewPassword });
-            const user = await User.findOne({ _id: { id } });
+            const user = await User.findOne({ where: { id } });
             const isPasswordMatch = await bcrypt.compare(password, user.password);
             if (!isPasswordMatch) {
                 return res.status(204),
@@ -159,7 +160,7 @@ app.post('/password', verifyToken, async (req, res) => {
             };
             const hashedPassword = await bcrypt.hash(`${NewPassword}`, 10);
             newUserData = { password:  hashedPassword };
-            var userId = { _id : {id: id} };
+            var userId = { where : {id: id} };
             await User.update( newUserData, userId, {
                 new: true,
                 runValidators: true,
@@ -181,8 +182,8 @@ app.get('/userinfo', verifyToken, async (req, res) => {
         
     try {
         const CookieId = req.cookies.userid
-        user = { id: CookieId };
-        const UserInfo = await User.findOne({ _id: { user } });
+        user = {id: CookieId};
+        const UserInfo = await User.findOne({ where: { user } });
         console.log(user);
         console.log(UserInfo);
         if (!UserInfo) {
@@ -202,7 +203,7 @@ app.post('/deleteuser', verifyToken, async (req, res) => {
     try {
         const id = req.cookies.userid
         console.log(id);
-        const user = await User.findOne({ _id: { id } });
+        const user = await User.findOne({ where: { id } });
         console.log(user);
         await user.destroy();
         res.status(204).redirect('/index.html');
