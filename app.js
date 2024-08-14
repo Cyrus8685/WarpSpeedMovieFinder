@@ -31,8 +31,6 @@ mongoose
     })
     .catch(err => console.error("Error syncing database:", err));
 
-    const User = require("./models/User.js")(mongoose.connect());// Import User Model
-
 
 //User Registration
 app.post("/register", async function (req, res) {
