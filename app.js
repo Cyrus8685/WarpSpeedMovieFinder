@@ -24,8 +24,7 @@ app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 
-mongoose
-    .connect()
+mongoose.connect(process.env.DB_URL)
     .then(() => {
         console.log("Database synced");
         http.listen(process.env.PORT, () => console.log (`Server Listening on Port ${process.env.PORT}`));
