@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const sequelize = require('./db.js'); // Import Sequelize instance
 const User = require("./models/User.js")(sequelize);// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
@@ -24,8 +24,8 @@ app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 
-mongoose
-    .connect('mongodb+srv://Cyrus:39sRx9dFzpDX8PB5@warpspeed.6bimxtn.mongodb.net/?retryWrites=true&w=majority&appName=WarpSpeed')
+sequelize
+    .sync()
     .then(() => {
         console.log("Database synced");
         http.listen(10000, () => console.log (`Server Listening on Port 10000`));
