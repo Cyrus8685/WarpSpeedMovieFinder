@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const User = require("./models/User.js");// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var path = require('path');
