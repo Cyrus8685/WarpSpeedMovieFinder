@@ -44,12 +44,12 @@ app.post("/register", async function (req, res) {
                 // any code here will run upon the 'connection' event
                 console.log(`user: ${socket.id} connected`);
                   });
-            const currentEmail = await User.findOne({ where: { email } });
+            const currentEmail = await User.findOne({ "email": { email } });
             if (currentEmail) {
                 return res.status(204),
                 io.emit('Email Already Exists', "Email Already Exists")
             }
-        const currentUsername = await User.findOne({ where: { username } });
+        const currentUsername = await User.findOne({ "username": { username } });
         if (currentUsername) {
             return res.status(204),
             io.emit('Username Already Exists', "Username Already Exists")
@@ -77,7 +77,7 @@ app.post("/register", async function (req, res) {
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ "user.email": { email } });
         if (!user) {
             return res.status(204),
             io.emit('Email Address Not Found', "Email Address Not Found")
