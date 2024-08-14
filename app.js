@@ -1,5 +1,5 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const mongoose = require('./db.js');
 const User = require("./models/User.js");// Import User Model
 const bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
@@ -25,7 +25,7 @@ app.use(helmet());
 app.use(cookieParser());
 
 mongoose
-    .connect("mongodb+srv://Cyrus:39sRx9dFzpDX8PB5@warpspeed.6bimxtn.mongodb.net/?retryWrites=true&w=majority&appName=WarpSpeed")
+    .connect()
     .then(() => {
         console.log("Database synced");
         http.listen(process.env.PORT, () => console.log (`Server Listening on Port ${process.env.PORT}`));

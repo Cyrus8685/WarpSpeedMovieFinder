@@ -1,4 +1,4 @@
-const { mongoose } = require('mongoose');
+const { mongoose, Collection } = require('mongoose');
 
 mongoose.connect(`${process.env.DB_URL}`, {
   useUnifiedTopology: "true"
