@@ -25,10 +25,10 @@ app.use(helmet());
 app.use(cookieParser());
 
 mongoose
-    .connect(process.env.DB_URL)
+    .connect('mongodb+srv://Cyrus:39sRx9dFzpDX8PB5@warpspeed.6bimxtn.mongodb.net/?retryWrites=true&w=majority&appName=WarpSpeed')
     .then(() => {
         console.log("Database synced");
-        http.listen(process.env.PORT, () => console.log (`Server Listening on Port ${process.env.PORT}`));
+        http.listen(10000, () => console.log (`Server Listening on Port 10000`));
     })
     .catch(err => console.error("Error syncing database:", err));
 
