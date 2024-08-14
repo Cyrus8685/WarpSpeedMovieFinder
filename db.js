@@ -1,6 +1,6 @@
 const { mongoose } = require('mongoose');
 
-mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:<${process.env.DB_PW}>${process.env.DB_URL}${process.env.DB_NAME}`, {
+mongoose.connect(`mongodb+srv://Cyrus:39sRx9dFzpDX8PB5@warpspeed.6bimxtn.mongodb.net/?retryWrites=true&w=majority&appName=WarpSpeed`, {
   useUnifiedTopology: "true"
 })
 
