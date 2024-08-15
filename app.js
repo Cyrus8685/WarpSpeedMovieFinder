@@ -117,7 +117,7 @@ try {
    res.cookie('token', `Bearer ${token}`, { httpOnly: true });
    res.cookie('userid', `${user.id}`, { httpOnly: true });
    setTimeout(() => {
-   res.status(204).redirect('/Html/profile.html');
+   res.status(204).redirect('/Html/homepage.html');
 }, "2000");
 } catch (error) {
    return res.status(204),
